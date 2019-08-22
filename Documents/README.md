@@ -14,6 +14,11 @@ Create build pipeline.
 Run the build and check that it is green.
 If needed, modify the yaml and put the platform: '' to use any cpu.
 
-Modify the yaml to add the test task, coverage.
+Modify the yaml to add the test task, coverage, copy task and the publish.
+![Alt text](./azure-pipelines.yml?raw=true "Build yml script")
 
 See link : https://docs.microsoft.com/en-us/azure/devops/pipelines/languages/dotnet-core?view=azure-devops
+
+## Create an http trigger for the azure function
+if the function is readonly, you should delete the WEBSITE_RUN_FROM_ZIP or WEBSITE_RUN_FROM_PACKAGE to add the trigger 
+see link : https://stackoverflow.com/questions/53630773/how-to-disable-read-only-mode-in-azure-function-app
