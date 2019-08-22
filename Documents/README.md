@@ -15,7 +15,7 @@ Run the build and check that it is green.
 If needed, modify the yaml and put the platform: '' to use any cpu.
 
 Modify the yaml to add the test task, coverage, copy task and the publish.
-![Alt text](./azure-pipelines.yml?raw=true "Build yml script")
+![Alt text](../azure-pipelines.yml?raw=true "Build yml script")
 
 See link : https://docs.microsoft.com/en-us/azure/devops/pipelines/languages/dotnet-core?view=azure-devops
 
