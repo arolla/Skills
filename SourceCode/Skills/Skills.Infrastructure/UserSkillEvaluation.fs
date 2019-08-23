@@ -42,3 +42,6 @@ module UserSkillEvaluation =
 
     let serializeSkills usersSkills =
         JsonConvert.SerializeObject(usersSkills)
+
+    let deserializeSkills jsonContent =
+        JsonConvert.DeserializeObject<UserSkillsDto list>(jsonContent)

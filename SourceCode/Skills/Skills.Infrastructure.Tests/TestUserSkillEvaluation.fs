@@ -70,7 +70,7 @@ type TestClass () =
         Assert.AreEqual(expectedConvertedSkills, convertedSkills)
 
     [<TestMethod>]
-    member this.``Given many users skills When I would save them Then they are serialized in a json file``() =
+    member this.``Given many users skills When I would save them Then they are serialized in a json content``() =
         let jack = {
             name = "Jack"
         }
@@ -104,3 +104,38 @@ type TestClass () =
 
         let expectedJson = @"[{""user"":{""name"":""Tom""},""evaluations"":[{""skill"":""csharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]},{""user"":{""name"":""Jack""},""evaluations"":[{""skill"":""fsharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]}]"
         Assert.AreEqual(expectedJson, jsonContent)
+
+
+    [<TestMethod>]
+    member this.``Given a json content When I would read its content Then I obtain user skills``() =
+        let jsonContent = @"[{""user"":{""name"":""Tom""},""evaluations"":[{""skill"":""csharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]},{""user"":{""name"":""Jack""},""evaluations"":[{""skill"":""fsharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]}]"
+        let usersSkills = deserializeSkills jsonContent 
+
+        let expectedUserSkills = [
+            {
+                user = {
+                    name = "Tom"
+                }
+                evaluations = [
+                    {
+                        skill = "csharp"
+                        date = DateTime(2019, 08,23)
+                        level = 3
+                    }
+                ]
+            }
+            {
+                user = {
+                    name = "Jack"
+                }
+                evaluations = [
+                    {
+                        skill = "fsharp"
+                        date = DateTime(2019, 08,23)
+                        level = 3
+                    }
+                ]
+            }
+        ]
+
+        Assert.AreEqual(expectedUserSkills, usersSkills)
