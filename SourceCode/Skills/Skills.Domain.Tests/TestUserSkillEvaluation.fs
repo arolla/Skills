@@ -45,5 +45,28 @@ type TestUserSkillEvaluation () =
 
         Assert.AreEqual(jack.name, jackSkills.user.name)
         Assert.AreEqual(0, jackSkills.evaluations.Length)
+                
+    [<TestMethod>]
+    member this.``Given skills of my user When I would find my user skills Then I get the existing user skills``() =
+        let jack = {
+            name = "Jack"
+        }
 
-        
+        let usersSkills = [
+            {
+                user = jack
+                evaluations = [
+                    {
+                        skill = Skill "fsharp"
+                        date = EvaluationDate(DateTime(2019, 08,23))
+                        level = Level 3
+                    }
+                ]
+            }
+        ]
+
+        let jackSkills = findSkills jack usersSkills
+
+        Assert.AreEqual(usersSkills.Head, jackSkills)
+
+            
