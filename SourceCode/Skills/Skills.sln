@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillsFunc", "SkillsFunc\Sk
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Skills.Domain.Tests", "Skills.Domain.Tests\Skills.Domain.Tests.fsproj", "{0F5C0B54-3092-41F4-9526-0F8FCE239511}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Skills.Domain", "Skills.Domain\Skills.Domain.fsproj", "{A31BED32-FBF7-4EDA-8AE8-F11831D35913}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0F5C0B54-3092-41F4-9526-0F8FCE239511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F5C0B54-3092-41F4-9526-0F8FCE239511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F5C0B54-3092-41F4-9526-0F8FCE239511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A31BED32-FBF7-4EDA-8AE8-F11831D35913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A31BED32-FBF7-4EDA-8AE8-F11831D35913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A31BED32-FBF7-4EDA-8AE8-F11831D35913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A31BED32-FBF7-4EDA-8AE8-F11831D35913}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
