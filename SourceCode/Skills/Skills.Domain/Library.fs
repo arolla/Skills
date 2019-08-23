@@ -25,8 +25,7 @@ module UserSkillEvaluation =
         evaluations : Evaluation list
     }
     
-    let addEvaluation evaluation user = 
+    let addEvaluation evaluation userSkills = 
         {
-            user = user
-            evaluations = [evaluation]
+            userSkills with evaluations = evaluation :: userSkills.evaluations 
         }

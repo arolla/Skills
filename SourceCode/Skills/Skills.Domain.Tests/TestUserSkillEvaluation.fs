@@ -19,10 +19,16 @@ type TestUserSkillEvaluation () =
             name = "Jack"
         }
 
-        let userSkills = addEvaluation evaluation user
-        Assert.AreEqual(userSkills.user, user)
+        let userSkills = {
+            user = user
+            evaluations = []
+        }
+
+        let modifiedUserSkills = addEvaluation evaluation userSkills
+        Assert.AreNotSame(modifiedUserSkills, userSkills)
+        Assert.AreEqual(modifiedUserSkills.user, user)
         let exists =
-            userSkills.evaluations
+            modifiedUserSkills.evaluations
             |> List.contains evaluation
         //let exists = List.contains evaluation userSkills.evaluations 
         Assert.IsTrue(exists)
