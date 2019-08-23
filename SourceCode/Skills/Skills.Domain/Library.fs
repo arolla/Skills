@@ -31,12 +31,8 @@ module UserSkillEvaluation =
         }
 
     let findSkills user (usersSkills:UserSkills list) =
-        if usersSkills.Length = 0 
-            || usersSkills.Head.user <> user
-        then
-            {
-                user = user
-                evaluations = []
-            }
-        else
-            usersSkills.Head
+        let foundSkills = List.tryFind (fun userSkill -> userSkill.user = user) usersSkills
+        match foundSkills with 
+        | None -> { user = user; evaluations = []}
+        | Some userSkills -> userSkills
+    
