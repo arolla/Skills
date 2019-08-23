@@ -32,3 +32,18 @@ type TestUserSkillEvaluation () =
             |> List.contains evaluation
         //let exists = List.contains evaluation userSkills.evaluations 
         Assert.IsTrue(exists)
+
+    [<TestMethod>]
+    member this.``Given no user skills When I would find the user skills Then I get no evaluation for this user``() =
+        let jack = {
+            name = "Jack"
+        }
+
+        let usersSkills = []
+
+        let jackSkills = findSkills jack usersSkills
+
+        Assert.AreEqual(jack.name, jackSkills.user.name)
+        Assert.AreEqual(0, jackSkills.evaluations.Length)
+
+        

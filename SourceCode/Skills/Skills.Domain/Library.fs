@@ -29,3 +29,9 @@ module UserSkillEvaluation =
         {
             userSkills with evaluations = evaluation :: userSkills.evaluations 
         }
+
+    let findSkills user userSkills =
+        {
+            user = user
+            evaluations = []
+        }
