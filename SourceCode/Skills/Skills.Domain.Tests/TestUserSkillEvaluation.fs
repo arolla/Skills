@@ -68,5 +68,32 @@ type TestUserSkillEvaluation () =
         let jackSkills = findSkills jack usersSkills
 
         Assert.AreEqual(usersSkills.Head, jackSkills)
+        
+    [<TestMethod>]
+    member this.``Given skills of other user When I would find my user skills Then I get no skills``() =
+        let jack = {
+            name = "Jack"
+        }
 
+        let tom = {
+            name = "Tom"
+        }
+
+        let usersSkills = [
+            {
+                user = tom
+                evaluations = [
+                    {
+                        skill = Skill "fsharp"
+                        date = EvaluationDate(DateTime(2019, 08,23))
+                        level = Level 3
+                    }
+                ]
+            }
+        ]
+
+        let jackSkills = findSkills jack usersSkills
+
+        Assert.AreEqual(jack.name, jackSkills.user.name)
+        Assert.AreEqual(0, jackSkills.evaluations.Length)
             

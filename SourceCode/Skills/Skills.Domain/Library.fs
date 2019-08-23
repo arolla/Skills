@@ -31,7 +31,9 @@ module UserSkillEvaluation =
         }
 
     let findSkills user (usersSkills:UserSkills list) =
-        if usersSkills.Length = 0 then
+        if usersSkills.Length = 0 
+            || usersSkills.Head.user <> user
+        then
             {
                 user = user
                 evaluations = []
