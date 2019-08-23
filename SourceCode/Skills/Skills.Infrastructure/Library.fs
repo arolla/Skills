@@ -2,6 +2,7 @@ namespace Skills.Infrastructure
 
 open System
 open Skills.Domain.UserSkillEvaluation
+open Newtonsoft.Json
 
 module UserSkillEvaluation =
     
@@ -38,3 +39,6 @@ module UserSkillEvaluation =
                 evaluations = List.map toEvaluationsDto domainSkills.evaluations
             }
         )
+
+    let serializeSkills usersSkills =
+        JsonConvert.SerializeObject(usersSkills)
