@@ -6,9 +6,7 @@ open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.VisualStudio.TestTools.UnitTesting
 
 [<TestClass>]
-type TestClass () =
-
-    
+type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given many users skills When I would convert them DTO Then they are serializable``() =
         let usersSkills : UserSkills list = [
@@ -130,7 +128,6 @@ type TestClass () =
 
         Assert.AreEqual(expectedUserSkills, convertedSkills)
 
-
     [<TestMethod>]
     member this.``Given many users skills When I would save them Then they are serialized in a json content``() =
         let jack = {
@@ -201,7 +198,6 @@ type TestClass () =
 
         Assert.AreEqual(expectedUserSkills, usersSkills)
 
-
     [<TestMethod>]
     member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
         let jack:User = {
@@ -231,3 +227,25 @@ type TestClass () =
 
         addEvaluation readSkills saveSkills jack evaluation |> ignore
 
+    // [<TestMethod>]
+    member this.``Given saved user skills When I read user skills Then I get the saved ones``() =
+        let tomName = "Tom"
+        let userSkillsToSave = {
+            user = {
+                    name = tomName
+            }
+            evaluations = [
+                {
+                    skill = "csharp"
+                    date = DateTime(2019, 08,23)
+                    level = 3
+                }
+            ]
+        }
+
+        let connectionString = getConnectionString()
+        saveUsersSkills connectionString userSkillsToSave |> ignore
+        let usersSkills = readUsersSkills connectionString tomName
+
+        Assert.AreEqual(tomName, usersSkills.user.name)
+        ()

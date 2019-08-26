@@ -135,5 +135,3 @@ type TestUserSkillEvaluation () =
         let foundJackSkills = findSkills jack usersSkills
 
         Assert.AreEqual(jackSkills, foundJackSkills)
-
-            
