@@ -67,3 +67,13 @@ module UserSkillEvaluation =
 
     let deserializeSkills jsonContent =
         JsonConvert.DeserializeObject<UserSkillsDto list>(jsonContent)
+
+    let addEvaluation readSkills saveSkills user evaluation =
+        let jsonSkills = readSkills()
+        let foundUserSkills = deserializeSkills jsonSkills
+        let convertedUserSkills = convertDtoSkills foundUserSkills
+        let userSkills = findSkills user convertedUserSkills
+        let updatedUserSkills = addEvaluation evaluation userSkills
+        let updatedUserSkillsDto = convertSkills [updatedUserSkills]
+        saveSkills updatedUserSkillsDto
+        ()

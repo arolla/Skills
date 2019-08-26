@@ -200,3 +200,34 @@ type TestClass () =
         ]
 
         Assert.AreEqual(expectedUserSkills, usersSkills)
+
+
+    [<TestMethod>]
+    member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
+        let jack:User = {
+            name = "Jack"
+        }
+        let evaluation:Evaluation = {
+            skill = Skill "csharp"
+            date = EvaluationDate(DateTime(2019, 08,23))
+            level = Level 3
+        }
+
+        let skills : UserSkills list = [
+            {
+                user = jack
+                evaluations = [
+                    evaluation
+                ]
+        }]
+
+        let expected = convertSkills skills
+
+        let readSkills () = "[]"
+            
+
+        let saveSkills skills =
+            Assert.AreEqual(expected, skills)
+
+        addEvaluation readSkills saveSkills jack evaluation |> ignore
+
