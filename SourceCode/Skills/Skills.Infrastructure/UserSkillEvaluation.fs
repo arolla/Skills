@@ -40,6 +40,28 @@ module UserSkillEvaluation =
             }
         )
 
+    let convertDtoSkills (userSkills: UserSkillsDto list): (UserSkills list) =
+        let fromUserDto (user: UserDto):(User) =
+            {name = user.name}
+
+        let fromEvaluationsDto ({skill = skill; date = date; level = level}: EvaluationDto):(Evaluation) =
+            {
+                skill = Skill skill
+                date = EvaluationDate date
+                level = Level level
+            }
+            
+        userSkills
+        |> List.map (fun domainSkills -> 
+            {
+                user = fromUserDto domainSkills.user
+                evaluations = List.map fromEvaluationsDto domainSkills.evaluations
+            }
+        )
+
+        
+
+
     let serializeSkills usersSkills =
         JsonConvert.SerializeObject(usersSkills)
 
