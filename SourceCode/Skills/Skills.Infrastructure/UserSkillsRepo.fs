@@ -3,11 +3,23 @@
 open System
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.WindowsAzure.Storage.Table
+open Microsoft.WindowsAzure.Storage
 
 module UserSkillsRepo =
 
+    type UserSkillsEntity (userName, userSkills : string) =
+        inherit TableEntity("1", userName)
+        new() = UserSkillsEntity(null, null)
+        member val userSkills : string = userSkills with get, set
+
     let getConnectionString() =
         String.Empty
+    
+    let getUserSkillsTable connectionString =
+        let storageAccount = CloudStorageAccount.Parse(connectionString)
+        let tableClient = storageAccount.CreateCloudTableClient()
+        let table = tableClient.GetTableReference("userskills")
+        table
 
     let saveUsersSkills connectionString (userSkills : UserSkillsDto) =
         let table = connectionString |> getUserSkillsTable 

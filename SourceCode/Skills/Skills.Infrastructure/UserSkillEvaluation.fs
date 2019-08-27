@@ -3,8 +3,6 @@ namespace Skills.Infrastructure
 open System
 open Skills.Domain.UserSkillEvaluation
 open Newtonsoft.Json
-open Microsoft.WindowsAzure.Storage
-open Microsoft.WindowsAzure.Storage.Table
 
 module UserSkillEvaluation =
     
@@ -22,10 +20,6 @@ module UserSkillEvaluation =
         user : UserDto
         evaluations : EvaluationDto list
     }
-    type UserSkillsEntity (userName, userSkills : string) =
-        inherit TableEntity("1", userName)
-        new() = UserSkillsEntity(null, null)
-        member val userSkills : string = userSkills with get, set
 
     let convertSkills (userSkills: UserSkills) : (UserSkillsDto) =
         let toUserDto (user: User) =
@@ -72,8 +66,3 @@ module UserSkillEvaluation =
         |> saveSkills
         ()
 
-    let getUserSkillsTable connectionString =
-        let storageAccount = CloudStorageAccount.Parse(connectionString)
-        let tableClient = storageAccount.CreateCloudTableClient()
-        let table = tableClient.GetTableReference("userskills")
-        table
