@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
+using static Skills.Infrastructure.UserSkillEvaluation;
 
 namespace SkillsFunc
 {
@@ -15,11 +16,11 @@ namespace SkillsFunc
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            //  string name = req.Query["name"];
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var userSkills = JsonConvert.DeserializeObject<UserSkillsDto>(requestBody);
+            var name = userSkills.user.name;
 
             return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
