@@ -1,10 +1,13 @@
-using System.IO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
+
+using Newtonsoft.Json;
+
+using System.IO;
+
 using static Skills.Infrastructure.UserSkillEvaluation;
 
 namespace SkillsFunc
@@ -18,10 +21,9 @@ namespace SkillsFunc
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             var userSkills = JsonConvert.DeserializeObject<UserSkillsDto>(requestBody);
-            var name = userSkills.user.name;
 
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
+            return userSkills != null
+                ? (ActionResult)new OkObjectResult($"Hello, {userSkills}")
                 : new BadRequestObjectResult($"Issue with the input {userSkills}");
         }
     }
