@@ -1,5 +1,6 @@
 ﻿namespace Skills.Infrastructure
 
+open System
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
