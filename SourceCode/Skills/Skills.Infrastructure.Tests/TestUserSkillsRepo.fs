@@ -14,13 +14,13 @@ type TestUserSkillsRepo () =
             user = {
                     name = tomName
             }
-            evaluations = [
+            evaluations = [|
                 {
                     skill = "csharp"
                     date = DateTime(2019, 08,23)
                     level = 3
                 }
-            ]
+            |]
         }
 
         let connectionString = getConnectionString()

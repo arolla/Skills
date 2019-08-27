@@ -30,13 +30,13 @@ type TestUserSkillEvaluation () =
                user = {
                     name = "Tom"
                }
-               evaluations = [
+               evaluations = [|
                    {
                        skill = "csharp"
                        date = DateTime(2019, 08,23)
                        level = 3
                    }
-               ]
+               |]
            }
 
         Assert.AreEqual(expectedConvertedSkills, convertedSkills)
@@ -49,13 +49,13 @@ type TestUserSkillEvaluation () =
                 user = {
                     name = "Tom"
                 }
-                evaluations = [
+                evaluations = [|
                     {
                         skill = "csharp"
                         date = DateTime(2019, 08,23)
                         level = 3
                     }
-                ]
+                |]
             }
 
         let convertedSkills = convertDtoSkills userSkillsDto
@@ -87,23 +87,23 @@ type TestUserSkillEvaluation () =
         let usersSkills = [
             {
                 user = tom
-                evaluations = [
+                evaluations = [|
                     {
                         skill = "csharp"
                         date = DateTime(2019, 08,23)
                         level = 3
                     }
-                ]
+                |]
             }
             {
                 user = jack
-                evaluations = [
+                evaluations = [|
                     {
                         skill = "fsharp"
                         date = DateTime(2019, 08,23)
                         level = 3
                     }
-                ]
+                |]
             }
         ]
 
@@ -137,7 +137,7 @@ type TestUserSkillEvaluation () =
             user = {
                 name = jackName
             }
-            evaluations = []
+            evaluations = Array.empty
         }
 
         let saveSkills skills =

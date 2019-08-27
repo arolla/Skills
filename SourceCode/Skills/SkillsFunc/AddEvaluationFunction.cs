@@ -16,15 +16,13 @@ namespace SkillsFunc
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            //  string name = req.Query["name"];
-
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             var userSkills = JsonConvert.DeserializeObject<UserSkillsDto>(requestBody);
             var name = userSkills.user.name;
 
             return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
-                : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+                : new BadRequestObjectResult($"Issue with the input {userSkills}");
         }
     }
 }

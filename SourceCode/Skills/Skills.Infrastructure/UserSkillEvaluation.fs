@@ -18,10 +18,10 @@ module UserSkillEvaluation =
     
     type UserSkillsDto = {
         user : UserDto
-        evaluations : EvaluationDto list
+        evaluations : EvaluationDto []
     }
 
-    let convertSkills (userSkills: UserSkills) : (UserSkillsDto) =
+    let convertSkills (userSkills: UserSkills) : UserSkillsDto =
         let toUserDto (user: User) =
             {name = user.name}
         let toEvaluationsDto ({skill = Skill skill; date = EvaluationDate date; level = Level level}: Evaluation) =
@@ -33,14 +33,14 @@ module UserSkillEvaluation =
         
         {
             user = toUserDto userSkills.user
-            evaluations = List.map toEvaluationsDto userSkills.evaluations
+            evaluations = userSkills.evaluations |> Array.ofList |> Array.map toEvaluationsDto 
         }
 
-    let convertDtoSkills (userSkills: UserSkillsDto): (UserSkills) =
-        let fromUserDto (user: UserDto):(User) =
+    let convertDtoSkills (userSkills: UserSkillsDto): UserSkills =
+        let fromUserDto (user: UserDto) : User =
             {name = user.name}
 
-        let fromEvaluationsDto ({skill = skill; date = date; level = level}: EvaluationDto):(Evaluation) =
+        let fromEvaluationsDto ({skill = skill; date = date; level = level}: EvaluationDto) : Evaluation =
             {
                 skill = Skill skill
                 date = EvaluationDate date
@@ -49,7 +49,7 @@ module UserSkillEvaluation =
            
         {
             user = fromUserDto userSkills.user
-            evaluations = List.map fromEvaluationsDto userSkills.evaluations
+            evaluations = Array.map fromEvaluationsDto userSkills.evaluations |> List.ofArray
         }
 
     let serializeSkills usersSkills =
