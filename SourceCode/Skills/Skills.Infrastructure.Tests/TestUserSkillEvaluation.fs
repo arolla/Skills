@@ -9,7 +9,7 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given many users skills When I would convert them DTO Then they are serializable``() =
-        let usersSkills : UserSkills list = [
+        let usersSkills : UserSkills = 
             {
                 user = {
                     name = "Tom"
@@ -22,23 +22,10 @@ type TestUserSkillEvaluation () =
                     }
                 ]
             }
-            {
-                user = {
-                    name = "Jack"
-                }
-                evaluations = [
-                    {
-                        skill = Skill "fsharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
-                    }
-                ]
-            }
-        ]
 
         let convertedSkills = convertSkills usersSkills
 
-        let expectedConvertedSkills : UserSkillsDto list = [
+        let expectedConvertedSkills : UserSkillsDto = 
            {
                user = {
                     name = "Tom"
@@ -51,26 +38,13 @@ type TestUserSkillEvaluation () =
                    }
                ]
            }
-           {
-               user = {
-                    name = "Jack"
-               }
-               evaluations = [
-                   {
-                       skill = "fsharp"
-                       date = DateTime(2019, 08,23)
-                       level = 3
-                   }
-               ]
-           }
-        ]
 
         Assert.AreEqual(expectedConvertedSkills, convertedSkills)
 
     [<TestMethod>]
     member this.``Given serialized user skills When I would convert them to domain entities Then I get domain user skills``() =
 
-        let userSkillsDto : UserSkillsDto list = [
+        let userSkillsDto : UserSkillsDto = 
             {
                 user = {
                     name = "Tom"
@@ -83,23 +57,10 @@ type TestUserSkillEvaluation () =
                     }
                 ]
             }
-            {
-                user = {
-                    name = "Jack"
-                }
-                evaluations = [
-                    {
-                        skill = "fsharp"
-                        date = DateTime(2019, 08,23)
-                        level = 3
-                    }
-                ]
-            }
-        ]
 
         let convertedSkills = convertDtoSkills userSkillsDto
 
-        let expectedUserSkills : UserSkills list = [
+        let expectedUserSkills : UserSkills = 
             {
                 user = {
                     name = "Tom"
@@ -112,19 +73,6 @@ type TestUserSkillEvaluation () =
                     }
                 ]
             }
-            {
-                user = {
-                    name = "Jack"
-                }
-                evaluations = [
-                    {
-                        skill = Skill "fsharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
-                    }
-                ]
-            }
-        ]
 
         Assert.AreEqual(expectedUserSkills, convertedSkills)
 
@@ -165,43 +113,10 @@ type TestUserSkillEvaluation () =
         Assert.AreEqual(expectedJson, jsonContent)
 
     [<TestMethod>]
-    member this.``Given a json content When I would read its content Then I obtain user skills``() =
-        let jsonContent = @"[{""user"":{""name"":""Tom""},""evaluations"":[{""skill"":""csharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]},{""user"":{""name"":""Jack""},""evaluations"":[{""skill"":""fsharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]}]"
-        let usersSkills = deserializeSkills jsonContent 
-
-        let expectedUserSkills = [
-            {
-                user = {
-                    name = "Tom"
-                }
-                evaluations = [
-                    {
-                        skill = "csharp"
-                        date = DateTime(2019, 08,23)
-                        level = 3
-                    }
-                ]
-            }
-            {
-                user = {
-                    name = "Jack"
-                }
-                evaluations = [
-                    {
-                        skill = "fsharp"
-                        date = DateTime(2019, 08,23)
-                        level = 3
-                    }
-                ]
-            }
-        ]
-
-        Assert.AreEqual(expectedUserSkills, usersSkills)
-
-    [<TestMethod>]
     member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
+        let jackName = "Jack"
         let jack:User = {
-            name = "Jack"
+            name = jackName
         }
         let evaluation:Evaluation = {
             skill = Skill "csharp"
@@ -209,43 +124,24 @@ type TestUserSkillEvaluation () =
             level = Level 3
         }
 
-        let skills : UserSkills list = [
-            {
+        let skills : UserSkills = {
                 user = jack
                 evaluations = [
                     evaluation
                 ]
-        }]
+        }
 
         let expected = convertSkills skills
 
-        let readSkills () = "[]"
-            
+        let readSkills jackName = {
+            user = {
+                name = jackName
+            }
+            evaluations = []
+        }
 
         let saveSkills skills =
             Assert.AreEqual(expected, skills)
 
         addEvaluation readSkills saveSkills jack evaluation |> ignore
-
-    // [<TestMethod>]
-    member this.``Given saved user skills When I read user skills Then I get the saved ones``() =
-        let tomName = "Tom"
-        let userSkillsToSave = {
-            user = {
-                    name = tomName
-            }
-            evaluations = [
-                {
-                    skill = "csharp"
-                    date = DateTime(2019, 08,23)
-                    level = 3
-                }
-            ]
-        }
-
-        let connectionString = getConnectionString()
-        saveUsersSkills connectionString userSkillsToSave |> ignore
-        let usersSkills = readUsersSkills connectionString tomName
-
-        Assert.AreEqual(tomName, usersSkills.user.name)
-        ()
+        

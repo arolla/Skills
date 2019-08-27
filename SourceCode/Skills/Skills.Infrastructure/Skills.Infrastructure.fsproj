@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="UserSkillEvaluation.fs" />
+    <Compile Include="UserSkillsRepo.fs" />
   </ItemGroup>
 
   <ItemGroup>
