@@ -4,6 +4,7 @@ open System
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
+open System.Threading.Tasks
 
 module UserSkillsRepo =
 
@@ -34,13 +35,21 @@ module UserSkillsRepo =
         }
         userSkillsResult |> Async.RunSynchronously |> ignore
 
-    let readUsersSkills connectionString userName : UserSkillsDto =
-        let table = connectionString |> getUserSkillsTable 
-        let selectOperation = TableOperation.Retrieve<UserSkillsEntity>(partitionKey, userName)
+    let read (executeOperation:Task<TableResult>) =
         let userSkillsResult = async {
-            let! result = Async.AwaitTask (table.ExecuteAsync(selectOperation))
-            let jsonUserSkills = (result.Result :?> UserSkillsEntity).userSkills
-            return deserializeUserSkills jsonUserSkills
+            let! result = Async.AwaitTask (executeOperation)
+            let option = result.Result |> Option.ofObj 
+            match option with 
+            | None -> return None
+            | Some(userSkill) -> 
+                let jsonUserSkills = (userSkill :?> UserSkillsEntity).userSkills
+                return (deserializeUserSkills jsonUserSkills) |> Some
         }
         let result = userSkillsResult |> Async.RunSynchronously
         result
+
+    let readUsersSkills connectionString userName : UserSkillsDto option =
+        let table = connectionString |> getUserSkillsTable 
+        let selectOperation = TableOperation.Retrieve<UserSkillsEntity>(partitionKey, userName)
+        let executeOperation = table.ExecuteAsync(selectOperation)
+        read executeOperation

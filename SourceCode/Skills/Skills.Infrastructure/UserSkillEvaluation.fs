@@ -64,8 +64,14 @@ module UserSkillEvaluation =
             date = EvaluationDate(evaluation.date)
             level = Level(evaluation.level)
         }
-        readSkills user.name
-        |> convertDtoSkills
+        match readSkills user.name with
+        | None -> 
+            {
+                user = { name = user.name }
+                evaluations = [||] // empty array
+            }
+        | Some(userSkill) -> userSkill
+        |> convertDtoSkills 
         |> addEvaluation domainEvaluation
         |> convertSkills
         |> saveSkills

@@ -141,12 +141,12 @@ type TestUserSkillEvaluation () =
 
         let expected = convertSkills skills
 
-        let readSkills jackName = {
+        let readSkills jackName = Some({
             user = {
                 name = jackName
             }
             evaluations = Array.empty
-        }
+        })
 
         let saveSkills skills =
             Assert.AreEqual(expected, skills)

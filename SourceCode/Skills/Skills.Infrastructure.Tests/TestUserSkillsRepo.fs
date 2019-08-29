@@ -4,6 +4,8 @@ open System
 open Skills.Infrastructure.UserSkillEvaluation
 open Skills.Infrastructure.UserSkillsRepo
 open Microsoft.VisualStudio.TestTools.UnitTesting
+open System.Threading.Tasks
+open Microsoft.WindowsAzure.Storage.Table
 
 [<TestClass>]
 type TestUserSkillsRepo () =
@@ -26,6 +28,16 @@ type TestUserSkillsRepo () =
         let connectionString = getConnectionString()
         saveUsersSkills connectionString userSkillsToSave |> ignore
         let usersSkills = readUsersSkills connectionString tomName
-
-        Assert.AreEqual(tomName, usersSkills.user.name)
+        match usersSkills with
+        | None -> Assert.Fail("Should not be null...")
+        | Some us ->
+        Assert.AreEqual(tomName, us.user.name)
         ()
+
+    [<TestMethod>]
+    member this.``Given no userSkill exists When I read skills Then no skill found``() =
+        let noSkillsOperation = 
+            Task<TableResult>.FromResult(TableResult())
+        let result = read noSkillsOperation
+        Assert.AreEqual(Option.None, result)
+    
