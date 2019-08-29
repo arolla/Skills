@@ -3,28 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-
 using Newtonsoft.Json;
-
 using System.IO;
-
-using static Skills.Infrastructure.UserSkillEvaluation;
+using static Skills.Infrastructure.EvaluationInterop;
 
 namespace SkillsFunc
 {
     public static class AddEvaluationFunction
     {
         [FunctionName("AddEvaluationFunction")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequest req, ILogger log)
+        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
-            var userSkills = JsonConvert.DeserializeObject<UserSkillsDto>(requestBody);
+            var userSkill = JsonConvert.DeserializeObject<UserSkillDto>(requestBody);
+            var connectionString = req.Query["connectionString"];
 
-            return userSkills != null
-                ? (ActionResult)new OkObjectResult($"Hello, {userSkills}")
-                : new BadRequestObjectResult($"Issue with the input {userSkills}");
+            AddEvaluation(connectionString, userSkill);
+            
+            return userSkill != null
+                ? (ActionResult)new OkObjectResult($"Hello, {userSkill}, {connectionString}")
+                : new BadRequestObjectResult($"Issue with the input {userSkill}");
         }
     }
 }

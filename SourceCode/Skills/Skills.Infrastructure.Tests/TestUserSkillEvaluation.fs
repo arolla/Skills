@@ -115,9 +115,15 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
         let jackName = "Jack"
-        let jack:User = {
+        let jack:UserDto = {
             name = jackName
         }
+        let evaluationDto:EvaluationDto = {
+            skill = "csharp"
+            date = DateTime(2019, 08,23)
+            level = 3
+        }
+
         let evaluation:Evaluation = {
             skill = Skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
@@ -125,7 +131,9 @@ type TestUserSkillEvaluation () =
         }
 
         let skills : UserSkills = {
-                user = jack
+                user = {
+                    name = jackName
+                }
                 evaluations = [
                     evaluation
                 ]
@@ -143,5 +151,5 @@ type TestUserSkillEvaluation () =
         let saveSkills skills =
             Assert.AreEqual(expected, skills)
 
-        addEvaluation readSkills saveSkills jack evaluation |> ignore
+        addEvaluation readSkills saveSkills jack evaluationDto |> ignore
         

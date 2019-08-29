@@ -58,10 +58,15 @@ module UserSkillEvaluation =
     let deserializeUserSkills jsonContent =
         JsonConvert.DeserializeObject<UserSkillsDto>(jsonContent)
 
-    let addEvaluation readSkills saveSkills (user:User) evaluation =
+    let addEvaluation readSkills saveSkills (user:UserDto) (evaluation:EvaluationDto) =
+        let domainEvaluation : Evaluation = {
+            skill = Skill(evaluation.skill)
+            date = EvaluationDate(evaluation.date)
+            level = Level(evaluation.level)
+        }
         readSkills user.name
         |> convertDtoSkills
-        |> addEvaluation evaluation
+        |> addEvaluation domainEvaluation
         |> convertSkills
         |> saveSkills
         ()
