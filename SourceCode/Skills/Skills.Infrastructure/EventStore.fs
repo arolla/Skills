@@ -36,8 +36,8 @@ module EventStore =
             eventType = typeof<EvaluationAdded>.Name
         }
 
-    let addEvent save domainEvent =
-        domainEvent
+    let addEvent save evaluationAddedDto =
+        evaluationAddedDto
         |> save
         
             
