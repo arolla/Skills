@@ -8,8 +8,8 @@
     <Compile Include="EventStore.fs" />
     <Compile Include="UserSkillEvaluation.fs" />
     <Compile Include="UserSkillsRepo.fs" />
-    <Compile Include="EvaluationInterop.fs" />
     <Compile Include="EventRepo.fs" />
+    <Compile Include="EvaluationInterop.fs" />
   </ItemGroup>
 
   <ItemGroup>

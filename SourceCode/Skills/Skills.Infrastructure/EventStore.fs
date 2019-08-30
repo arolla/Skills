@@ -34,7 +34,6 @@ module EventStore =
 
     let addEvent save domainEvent =
         domainEvent
-        |> convertToDto
         |> save
         
             

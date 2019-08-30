@@ -2,6 +2,8 @@
 
 open UserSkillEvaluation
 open UserSkillsRepo
+open EventStore
+open EventRepo
 
 module EvaluationInterop =
 
@@ -14,4 +16,8 @@ module EvaluationInterop =
         let readSkills = readUsersSkills connectionString
         let saveSkills = saveUsersSkills connectionString
         addEvaluation readSkills saveSkills user.user user.evaluation
+
+    let AddEvaluationAddedEvent connectionString (evaluationAddedEvent:EvaluationAddedDto) =
+        let saveEvent = saveEvent connectionString
+        addEvent saveEvent evaluationAddedEvent
         

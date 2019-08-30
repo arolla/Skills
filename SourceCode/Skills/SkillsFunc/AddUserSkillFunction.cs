@@ -10,13 +10,12 @@ using Newtonsoft.Json;
 using System.IO;
 
 using static Skills.Infrastructure.EvaluationInterop;
-using static Skills.Infrastructure.EventStore;
 
 namespace SkillsFunc
 {
-    public static class AddEvaluationFunction
+    public static class AddUserSkillFunction
     {
-        [FunctionName("AddEvaluationFunction")]
+        [FunctionName("AddUserSkillFunction")]
         public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -29,13 +28,13 @@ namespace SkillsFunc
             var connectionString = config["SkillsStorageConnectionString"];
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
-            var evaluationAddedEvent = JsonConvert.DeserializeObject<EvaluationAddedDto>(requestBody);
+            var userSkill = JsonConvert.DeserializeObject<UserSkillDto>(requestBody);
 
-            AddEvaluationAddedEvent(connectionString, evaluationAddedEvent);
+            AddEvaluation(connectionString, userSkill);
 
-            return evaluationAddedEvent != null
-                ? (ActionResult)new OkObjectResult($"Hello, {evaluationAddedEvent}, {connectionString}")
-                : new BadRequestObjectResult($"Issue with the input {evaluationAddedEvent}");
+            return userSkill != null
+                ? (ActionResult)new OkObjectResult($"Hello, {userSkill}, {connectionString}")
+                : new BadRequestObjectResult($"Issue with the input {userSkill}");
         }
     }
 }
