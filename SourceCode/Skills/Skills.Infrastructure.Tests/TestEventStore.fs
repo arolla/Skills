@@ -14,7 +14,7 @@ type TestEventStore () =
 
         let eventToSave:EvaluationAddedDto = {
             date = now
-            data = """{"evaluation":{"date":"2019-08-30T00:00:00","level":4,"skill":"poterie"},"user":{"name":"Machin"}}"""
+            data = """{"user":{"name":"Machin"},"evaluation":{"skill":"poterie","date":"2019-08-30T00:00:00","level":4}}"""
             eventType = "EvaluationAdded"
         }
 
@@ -39,7 +39,7 @@ type TestEventStore () =
 
         let expectedEvent:EvaluationAddedDto = {
             date = now
-            data = """{"evaluation":{"date":"2019-08-30T00:00:00","level":4,"skill":"poterie"},"user":{"name":"Machin"}}"""
+            data = """{"user":{"name":"Machin"},"evaluation":{"skill":"poterie","date":"2019-08-30T00:00:00","level":4}}"""
             eventType = "EvaluationAdded"
         }
 
