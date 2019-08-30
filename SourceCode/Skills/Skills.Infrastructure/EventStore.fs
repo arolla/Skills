@@ -13,17 +13,17 @@ module EventStore =
         eventType: string
     }
 
-    let convertToDto (eventDomain:EvaluationAdded) =
+    let convertToDto (domainEvent:EvaluationAdded) =
         
-        let ({skill = Skill skill; level = Level level; date = EvaluationDate date}) = eventDomain.evaluation
+        let ({skill = Skill skill; level = Level level; date = EvaluationDate date}) = domainEvent.evaluation
 
         let userSkill = {|
-            user = {|name = eventDomain.user.name|}
+            user = {|name = domainEvent.user.name|}
             evaluation = {| skill = skill; level = level; date = date |}
         |}
 
         let serializedUserSkill = JsonConvert.SerializeObject(userSkill)
-        let (EventDate date) = eventDomain.date
+        let (EventDate date) = domainEvent.date
 
         {
             date = date
@@ -31,4 +31,10 @@ module EventStore =
             eventType = typeof<EvaluationAdded>.Name
         }
 
+
+    let addEvent save domainEvent =
+        domainEvent
+        |> convertToDto
+        |> save
+        
             
