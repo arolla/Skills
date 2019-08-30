@@ -9,6 +9,7 @@
     <Compile Include="UserSkillEvaluation.fs" />
     <Compile Include="UserSkillsRepo.fs" />
     <Compile Include="EvaluationInterop.fs" />
+    <Compile Include="EventRepo.fs" />
   </ItemGroup>
 
   <ItemGroup>
