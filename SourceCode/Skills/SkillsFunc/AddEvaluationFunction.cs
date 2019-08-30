@@ -29,7 +29,7 @@ namespace SkillsFunc
             var connectionString = config["SkillsStorageConnectionString"];
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
-            var evaluationAddedEvent = JsonConvert.DeserializeObject<EvaluationAddedDto>(requestBody);
+            var evaluationAddedEvent = JsonConvert.DeserializeObject<UserEvalutationDto>(requestBody);
 
             AddEvaluationAddedEvent(connectionString, evaluationAddedEvent);
 
