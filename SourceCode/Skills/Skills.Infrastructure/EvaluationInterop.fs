@@ -4,6 +4,7 @@ open UserSkillEvaluation
 open UserSkillsRepo
 open EventStore
 open EventRepo
+open EventSender
 open System
 open Newtonsoft.Json
 
@@ -26,6 +27,7 @@ module EvaluationInterop =
 
     let AddEvaluationAddedEvent connectionString (userEvaluation:UserEvalutationDto) =
         let saveEvent = saveEvent connectionString
+        let enqueue = sendEvent connectionString
         let userSkill = {
             user = userEvaluation.User
             evaluation = userEvaluation.Evaluation
@@ -36,5 +38,5 @@ module EvaluationInterop =
             data = data
             eventType = "EvaluationAdded"
         }
-        addEvent saveEvent evaluationAddedEvent
+        addEvent saveEvent enqueue evaluationAddedEvent
         

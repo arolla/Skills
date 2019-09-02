@@ -36,8 +36,8 @@ module EventStore =
             eventType = typeof<EvaluationAdded>.Name
         }
 
-    let addEvent save evaluationAddedDto =
+    let addEvent save enqueue evaluationAddedDto =
         evaluationAddedDto
         |> save
-        
-            
+        evaluationAddedDto
+        |> enqueue
