@@ -20,7 +20,11 @@ module EvaluationInterop =
         Evaluation: EvaluationDto
     }
 
-    let AddEvaluation connectionString (user:UserSkillDto) =
+    let GetUserSkillFromEvent event =
+        JsonConvert.DeserializeObject<UserSkillDto>(event.data)        
+
+    let AddEvaluation connectionString event =
+        let user = GetUserSkillFromEvent event 
         let readSkills = readUsersSkills connectionString
         let saveSkills = saveUsersSkills connectionString
         addEvaluation readSkills saveSkills user.user user.evaluation
