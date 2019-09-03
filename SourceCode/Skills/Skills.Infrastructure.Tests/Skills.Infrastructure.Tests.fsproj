@@ -11,6 +11,7 @@
     <Compile Include="TestEventSender.fs" />
     <Compile Include="TestEventStore.fs" />
     <Compile Include="TestEventRepo.fs" />
+    <Compile Include="TestUserSkillsInterop.fs" />
     <Compile Include="TestUserSkillsRepo.fs" />
     <Compile Include="TestUserSkillEvaluation.fs" />
   </ItemGroup>
