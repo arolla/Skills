@@ -12,7 +12,7 @@ type TestUserSkillEvaluation () =
         let usersSkills : UserSkills = 
             {
                 user = {
-                    name = "Tom"
+                    name = UserName "Tom"
                 }
                 evaluations = [
                     {
@@ -63,7 +63,7 @@ type TestUserSkillEvaluation () =
         let expectedUserSkills : UserSkills = 
             {
                 user = {
-                    name = "Tom"
+                    name = UserName "Tom"
                 }
                 evaluations = [
                     {
@@ -132,7 +132,7 @@ type TestUserSkillEvaluation () =
 
         let skills : UserSkills = {
                 user = {
-                    name = jackName
+                    name = UserName jackName
                 }
                 evaluations = [
                     evaluation

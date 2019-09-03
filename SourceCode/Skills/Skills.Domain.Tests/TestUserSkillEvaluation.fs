@@ -16,7 +16,7 @@ type TestUserSkillEvaluation () =
             level = Level 3
         }
         let user = {
-            name = "Jack"
+            name = UserName "Jack"
         }
 
         let userSkills = {
@@ -36,7 +36,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given no user skills When I would find the user skills Then I get no evaluation for this user``() =
         let jack = {
-            name = "Jack"
+            name = UserName "Jack"
         }
 
         let usersSkills = []
@@ -49,7 +49,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given skills of my user When I would find my user skills Then I get the existing user skills``() =
         let jack = {
-            name = "Jack"
+            name = UserName "Jack"
         }
 
         let usersSkills = [
@@ -72,11 +72,11 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given skills of other user When I would find my user skills Then I get no skills``() =
         let jack = {
-            name = "Jack"
+            name = UserName "Jack"
         }
 
         let tom = {
-            name = "Tom"
+            name = UserName "Tom"
         }
 
         let usersSkills = [
@@ -100,7 +100,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given many users skills (including mine) When I would find my user skills Then I get the existing user skills``() =
         let jack = {
-            name = "Jack"
+            name = UserName "Jack"
         }
         
         let jackSkills = {
@@ -115,7 +115,7 @@ type TestUserSkillEvaluation () =
         }
 
         let tom = {
-            name = "Tom"
+            name = UserName "Tom"
         }
 
         let usersSkills = [

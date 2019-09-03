@@ -21,9 +21,9 @@ module EventStore =
     let convertToDto (domainEvent:EvaluationAdded) =
         
         let ({skill = Skill skill; level = Level level; date = EvaluationDate date} : Evaluation) = domainEvent.evaluation
-
+        let (UserName name) = domainEvent.user.name
         let userSkill = {
-            user = {name = domainEvent.user.name}
+            user = {name = name}
             evaluation = { skill = skill; level = level; date = date }
         }
 

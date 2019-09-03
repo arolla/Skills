@@ -9,15 +9,17 @@ module UserSkillEvaluation =
     type Skill = Skill of string 
     
     type EvaluationDate = EvaluationDate  of DateTime
-    
+        
     type Evaluation = {
         skill : Skill
         date : EvaluationDate
         level : Level
     }
     
+    type UserName = UserName of string
+
     type User = {
-        name : string
+        name : UserName
     }
     
     type UserSkills = {
