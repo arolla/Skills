@@ -16,9 +16,6 @@ module UserSkillsRepo =
         new() = UserSkillsEntity(null, null)
         member val userSkills : string = userSkills with get, set
 
-    let getConnectionString() =
-        String.Empty
-    
     let getUserSkillsTable connectionString =
         let storageAccount = CloudStorageAccount.Parse(connectionString)
         let tableClient = storageAccount.CreateCloudTableClient()

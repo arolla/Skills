@@ -25,7 +25,7 @@ type TestUserSkillsRepo () =
             |]
         }
 
-        let connectionString = getConnectionString()
+        let connectionString = ""
         saveUsersSkills connectionString userSkillsToSave |> ignore
         let usersSkills = readUsersSkills connectionString tomName
         match usersSkills with
