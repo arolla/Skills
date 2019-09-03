@@ -4,10 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
 using Newtonsoft.Json;
-
-using System.IO;
 
 using static Skills.Infrastructure.UserSkillsInterop;
 using static Skills.Infrastructure.UserSkillEvaluation;
@@ -28,8 +25,9 @@ namespace SkillsFunc
                 .Build();
             var connectionString = config["SkillsStorageConnectionString"];
 
-            string requestBody = new StreamReader(req.Body).ReadToEnd();
-            var user = JsonConvert.DeserializeObject<UserDto>(requestBody);
+            var user = JsonConvert.DeserializeObject<UserDto>(
+                JsonConvert.SerializeObject(
+                    req.GetQueryParameterDictionary()));
 
             return new OkObjectResult(ReadUserSkills(connectionString, user));
         }
