@@ -26,6 +26,23 @@ module UserSkillEvaluation =
         user : User
         evaluations : Evaluation list
     }
+
+    module UserName =
+        
+        let create name =
+            if String.IsNullOrWhiteSpace(name) then sprintf "Name is invalid (%s)" name |> Error
+            else
+            UserName name |> Ok
+
+        let value userName =
+            let (UserName name) = userName
+            name
+
+    module User =
+        let create name =
+            UserName.create name
+            |> Result.map (fun userName -> {name = userName})
+            
     
     let addEvaluation evaluation userSkills = 
         {

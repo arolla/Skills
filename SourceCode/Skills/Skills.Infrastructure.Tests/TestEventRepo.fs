@@ -17,5 +17,7 @@ type TestEventRepo () =
         }
 
         let connectionString = ""
-        saveEvent connectionString eventToStore |> Async.RunSynchronously
-    
+        let result = saveEvent connectionString eventToStore |> Async.RunSynchronously
+        match result with
+        | Error error   -> Assert.Fail(error.Message)
+        | Ok _          -> Assert.IsTrue(true, "Test pass ! \o/")

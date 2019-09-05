@@ -4,11 +4,13 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
 
-using static Skills.Infrastructure.UserSkillsInterop;
-using static Skills.Infrastructure.UserSkillEvaluation;
 using System.Threading.Tasks;
+
+using static Skills.Infrastructure.UserSkillEvaluation;
+using static Skills.Infrastructure.UserSkillsInterop;
 
 namespace SkillsFunc
 {

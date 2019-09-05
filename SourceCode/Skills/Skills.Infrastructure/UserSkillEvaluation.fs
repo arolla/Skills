@@ -15,6 +15,10 @@ module UserSkillEvaluation =
     type UserDto = {
         name : string
     }
+
+    module User =
+        let fromDto (dto:UserDto) =
+            User.create dto.name
     
     type UserSkillsDto = {
         user : UserDto

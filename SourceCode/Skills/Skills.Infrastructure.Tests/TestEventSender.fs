@@ -17,5 +17,8 @@ type TestEventSender () =
         }
 
         let connectionString = ""
-        sendEvent connectionString eventToEnqueue |> Async.RunSynchronously
+        let result = sendEvent connectionString eventToEnqueue |> Async.RunSynchronously
+        match result with
+        | Error error -> Assert.Fail(error.Message)
+        | Ok _ -> Assert.IsTrue(true, "Test pass ! \o/")
     
