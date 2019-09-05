@@ -141,15 +141,19 @@ type TestUserSkillEvaluation () =
 
         let expected = convertSkills skills
 
-        let readSkills jackName = Some({
-            user = {
-                name = jackName
-            }
-            evaluations = Array.empty
-        })
+        let readSkills jackName = async {
+            return Some({
+                user = {
+                    name = jackName
+                }
+                evaluations = Array.empty
+            })
+        }
 
-        let saveSkills skills =
+        let saveSkills skills = async {
             Assert.AreEqual(expected, skills)
+            return Ok ()
+        }
 
         addEvaluation readSkills saveSkills jack evaluationDto |> ignore
         

@@ -23,13 +23,19 @@ module EvaluationInterop =
     let GetUserSkillFromEvent event =
         JsonConvert.DeserializeObject<UserSkillDto>(event.data)        
 
-    let AddEvaluation connectionString event =
+    let AddEvaluationAsync connectionString event =
         let user = GetUserSkillFromEvent event 
         let readSkills = readUsersSkills connectionString
         let saveSkills = saveUsersSkills connectionString
-        addEvaluation readSkills saveSkills user.user user.evaluation
 
-    let AddEvaluationAddedEvent connectionString (userEvaluation:UserEvalutationDto) =
+        async{
+            match! addEvaluation readSkills saveSkills user.user user.evaluation with
+            | Ok _      -> ()
+            | Error exn -> raise exn
+        }
+        |> Async.StartImmediateAsTask :> System.Threading.Tasks.Task
+
+    let AddEvaluationAddedEventAsync connectionString (userEvaluation:UserEvalutationDto) =
         let saveEvent = saveEvent connectionString
         let enqueue = sendEvent connectionString
         let userSkill = {
@@ -42,5 +48,10 @@ module EvaluationInterop =
             data = data
             eventType = "EvaluationAdded"
         }
-        addEvent saveEvent enqueue evaluationAddedEvent
+        async{
+            match! addEvent saveEvent enqueue evaluationAddedEvent with
+            | Ok ()     -> ()
+            | Error exn -> raise exn
+        }
+        |> Async.StartImmediateAsTask :> System.Threading.Tasks.Task
         

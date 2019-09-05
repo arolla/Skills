@@ -17,5 +17,5 @@ type TestEventSender () =
         }
 
         let connectionString = ""
-        sendEvent connectionString eventToEnqueue |> ignore
+        sendEvent connectionString eventToEnqueue |> Async.RunSynchronously
     

@@ -22,7 +22,11 @@ module EventSender =
         let cloudQueueMessage = new CloudQueueMessage(jsonEvent)
         
         async {
-            do! Async.AwaitTask (queue.AddMessageAsync(cloudQueueMessage))
-        } |> Async.RunSynchronously |> ignore
+            try
+                do! Async.AwaitTask (queue.AddMessageAsync(cloudQueueMessage))
+                return Ok()
+            with
+            | ex -> return Error ex
+        }
 
 

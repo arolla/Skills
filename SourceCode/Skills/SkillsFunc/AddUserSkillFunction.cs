@@ -4,13 +4,14 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using static Skills.Infrastructure.EventStore;
 using static Skills.Infrastructure.EvaluationInterop;
+using System.Threading.Tasks;
 
 namespace SkillsFunc
 {
     public static class AddUserSkillFunction
     {
         [FunctionName("AddUserSkillFunction")]
-        public static void Run([QueueTrigger("%EventQueueName%", Connection = "%SkillsConnectionString%")]string myQueueItem, ILogger log, ExecutionContext context)
+        public static async Task Run([QueueTrigger("%EventQueueName%", Connection = "%SkillsConnectionString%")]string myQueueItem, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
 
@@ -22,7 +23,7 @@ namespace SkillsFunc
             var connectionString = config["SkillsStorageConnectionString"];
             
             var evaluationAddedEvent = JsonConvert.DeserializeObject<EvaluationAddedDto>(myQueueItem);
-            AddEvaluation(connectionString, evaluationAddedEvent);
+            await AddEvaluationAsync(connectionString, evaluationAddedEvent);
             log.LogInformation($"C# Queue trigger function user skill saved: {evaluationAddedEvent.data} ");
         }
     }

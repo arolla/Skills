@@ -18,9 +18,11 @@ type TestEventStore () =
             eventType = "EvaluationAdded"
         }
 
-        let save event =
+        let save event = async{
             Assert.AreEqual(eventToSave, event)
-        let enqueue _ = ()
+            return Ok()
+        }
+        let enqueue _ = async{return Ok()}
     
         addEvent save enqueue eventToSave
 
@@ -56,9 +58,11 @@ type TestEventStore () =
             eventType = "EvaluationAdded"
         }
 
-        let save _ = ()
+        let save e = async{return Ok ()}
 
-        let enqueue event =
+        let enqueue event = async{
             Assert.AreEqual(eventToSave, event)
+            return Ok()
+        }
 
         addEvent save enqueue eventToSave

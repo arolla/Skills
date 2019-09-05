@@ -18,6 +18,10 @@ module EventStore =
         evaluation : EvaluationDto
     }
 
+    type private SaveEvent = EvaluationAddedDto -> Async<Result<unit, exn>>
+    type private Enqueue = EvaluationAddedDto -> Async<Result<unit, exn>>
+
+
     let convertToDto (domainEvent:EvaluationAdded) =
         
         let ({skill = Skill skill; level = Level level; date = EvaluationDate date} : Evaluation) = domainEvent.evaluation
@@ -36,8 +40,11 @@ module EventStore =
             eventType = typeof<EvaluationAdded>.Name
         }
 
-    let addEvent save enqueue evaluationAddedDto =
-        evaluationAddedDto
-        |> save
-        evaluationAddedDto
-        |> enqueue
+    let addEvent (saveEvent:SaveEvent) (enqueue: Enqueue) evaluationAddedDto =
+        async {
+            let! r = saveEvent evaluationAddedDto
+            match r with
+            | Error _ as error -> return error
+            | Ok _ ->
+            return! enqueue evaluationAddedDto
+        }

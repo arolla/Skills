@@ -8,13 +8,14 @@ using Newtonsoft.Json;
 
 using static Skills.Infrastructure.UserSkillsInterop;
 using static Skills.Infrastructure.UserSkillEvaluation;
+using System.Threading.Tasks;
 
 namespace SkillsFunc
 {
     public static class GetUserSkillFunction
     {
         [FunctionName("GetUserSkillFunction")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -29,7 +30,7 @@ namespace SkillsFunc
                 JsonConvert.SerializeObject(
                     req.GetQueryParameterDictionary()));
 
-            return new OkObjectResult(ReadUserSkills(connectionString, user));
+            return new OkObjectResult(await ReadUserSkillsAsync(connectionString, user));
         }
     }
 }

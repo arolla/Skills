@@ -26,14 +26,16 @@ module UserSkillsRepo =
         let table = connectionString |> getUserSkillsTable 
         let jsonUserSkills = serializeSkills userSkills
         let insertOperation = TableOperation.InsertOrReplace(new UserSkillsEntity(userSkills.user.name, jsonUserSkills))
-        let userSkillsResult = async {
-            let! result = Async.AwaitTask (table.ExecuteAsync(insertOperation))
-            return result.Result
+        async {
+            try
+                let! _ = Async.AwaitTask (table.ExecuteAsync(insertOperation))
+                return Ok ()
+            with
+            | exn -> return Error exn
         }
-        userSkillsResult |> Async.RunSynchronously |> ignore
 
     let read (executeOperation:Task<TableResult>) =
-        let userSkillsResult = async {
+        async {
             let! result = Async.AwaitTask (executeOperation)
             let option = result.Result |> Option.ofObj 
             match option with 
@@ -42,10 +44,8 @@ module UserSkillsRepo =
                 let jsonUserSkills = (userSkill :?> UserSkillsEntity).userSkills
                 return (deserializeUserSkills jsonUserSkills) |> Some
         }
-        let result = userSkillsResult |> Async.RunSynchronously
-        result
 
-    let readUsersSkills connectionString userName : UserSkillsDto option =
+    let readUsersSkills connectionString userName : Async<UserSkillsDto option> =
         let table = connectionString |> getUserSkillsTable 
         let selectOperation = TableOperation.Retrieve<UserSkillsEntity>(partitionKey, userName)
         let executeOperation = table.ExecuteAsync(selectOperation)

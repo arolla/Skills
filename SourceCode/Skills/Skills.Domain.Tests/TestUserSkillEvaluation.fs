@@ -30,7 +30,6 @@ type TestUserSkillEvaluation () =
         let exists =
             modifiedUserSkills.evaluations
             |> List.contains evaluation
-        //let exists = List.contains evaluation userSkills.evaluations 
         Assert.IsTrue(exists)
 
     [<TestMethod>]
