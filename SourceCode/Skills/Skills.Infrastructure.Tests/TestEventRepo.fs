@@ -17,5 +17,5 @@ type TestEventRepo () =
         }
 
         let connectionString = ""
-        saveEvent connectionString eventToStore |> ignore
+        saveEvent connectionString eventToStore |> Async.RunSynchronously
     

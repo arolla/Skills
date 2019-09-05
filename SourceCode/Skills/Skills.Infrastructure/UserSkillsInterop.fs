@@ -5,7 +5,9 @@ open UserSkillEvaluation
 
 module UserSkillsInterop =
 
-    let ReadUserSkills connectionString user =
-        match readUsersSkills connectionString user.name with
-        | None -> {user = user; evaluations = [||]}
-        | Some userSkills -> userSkills
+    let ReadUserSkillsAsync connectionString user =
+        async {
+            match! readUsersSkills connectionString user.name with
+            | None              -> return {user = user; evaluations = [||]}
+            | Some userSkills   -> return userSkills
+        } |> Async.StartImmediateAsTask

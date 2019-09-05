@@ -35,8 +35,10 @@ module EventRepo =
             |> serialize
         let insertOperation = TableOperation.InsertOrReplace(new EventEntity(jsonEvent))
         async {
-            let! result = Async.AwaitTask (table.ExecuteAsync(insertOperation))
-            return result.Result
-        } |> Async.RunSynchronously |> ignore
-
+            try
+                let! _ = Async.AwaitTask (table.ExecuteAsync(insertOperation))
+                return Ok()
+            with
+            | exn -> return Error exn
+        }
 

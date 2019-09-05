@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 using System.IO;
-
+using System.Threading.Tasks;
 using static Skills.Infrastructure.EvaluationInterop;
 using static Skills.Infrastructure.EventStore;
 
@@ -17,7 +17,7 @@ namespace SkillsFunc
     public static class AddEvaluationFunction
     {
         [FunctionName("AddEvaluationFunction")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -31,7 +31,7 @@ namespace SkillsFunc
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             var evaluationAddedEvent = JsonConvert.DeserializeObject<UserEvalutationDto>(requestBody);
 
-            AddEvaluationAddedEvent(connectionString, evaluationAddedEvent);
+            await AddEvaluationAddedEventAsync(connectionString, evaluationAddedEvent);
 
             return evaluationAddedEvent != null
                 ? (ActionResult)new OkObjectResult($"Hello, {evaluationAddedEvent}, {connectionString}")

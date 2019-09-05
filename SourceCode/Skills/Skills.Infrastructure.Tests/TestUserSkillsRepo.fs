@@ -26,18 +26,20 @@ type TestUserSkillsRepo () =
         }
 
         let connectionString = ""
-        saveUsersSkills connectionString userSkillsToSave |> ignore
+
         let usersSkills = readUsersSkills connectionString tomName
-        match usersSkills with
-        | None -> Assert.Fail("Should not be null...")
-        | Some us ->
-        Assert.AreEqual(tomName, us.user.name)
-        ()
+        async {
+            match! usersSkills with
+            | None -> Assert.Fail("Should not be null...")
+            | Some us ->
+            Assert.AreEqual(tomName, us.user.name)
+        } |> Async.RunSynchronously
 
     [<TestMethod>]
     member this.``Given no userSkill exists When I read skills Then no skill found``() =
         let noSkillsOperation = 
             Task<TableResult>.FromResult(TableResult())
-        let result = read noSkillsOperation
-        Assert.AreEqual(Option.None, result)
-    
+        async {
+            let! result = read noSkillsOperation
+            Assert.AreEqual(Option.None, result)
+        } |> Async.RunSynchronously 
