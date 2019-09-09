@@ -2,7 +2,7 @@
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open Skills.Infrastructure.EventStore
+open Skills.Infrastructure
 open Skills.Infrastructure.EventSender
 
 [<TestClass>]

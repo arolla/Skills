@@ -1,30 +1,16 @@
 namespace Skills.Infrastructure
 
-open System
 open Skills.Domain.UserSkillEvaluation
 open Newtonsoft.Json
 open Skills.Domain
+open Skills.Infrastructure.Dto
 
 module UserSkillEvaluation =
-    
-    type EvaluationDto = {
-        skill : string
-        date : DateTime
-        level : int
-    }
-    
-    type UserDto = {
-        name : string
-    }
 
     module User =
         let fromDto (dto:UserDto) =
             User.create dto.name
     
-    type UserSkillsDto = {
-        user : UserDto
-        evaluations : EvaluationDto []
-    }
     
     type private ReadSkills = string -> Async<UserSkillsDto option>
     type private SaveSkills = UserSkillsDto -> Async<Result<unit, exn>>

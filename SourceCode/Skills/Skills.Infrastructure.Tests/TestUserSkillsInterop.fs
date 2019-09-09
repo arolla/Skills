@@ -1,6 +1,6 @@
 ﻿namespace Skills.Infrastructure.Tests
 
-open Skills.Infrastructure.UserSkillEvaluation
+open Skills.Infrastructure.Dto
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure.UserSkillsInterop
 

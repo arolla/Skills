@@ -4,15 +4,16 @@ open UserSkillsRepo
 open UserSkillEvaluation
 open Skills.Domain.UserSkillEvaluation
 open System.Threading.Tasks
+open Skills.Infrastructure.Dto
 
 module UserSkillsInterop =
 
-    let ReadUserSkillsAsync connectionString userDto =
+    let ReadUserSkillsAsync connectionString (userDto : UserDto) =
         if System.String.IsNullOrWhiteSpace(connectionString) then invalidArg "connectionString" "Must not be null, empty or whitespace"
 
         if obj.ReferenceEquals(userDto, null) then nullArg "userDto"
 
-        let readUserSkills user =
+        let readUserSkills (user : User) =
             let username = UserName.value user.name
 
             async {

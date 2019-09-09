@@ -1,7 +1,7 @@
 ﻿namespace Skills.Infrastructure.Tests
 
 open System
-open Skills.Infrastructure.UserSkillEvaluation
+open Skills.Infrastructure.Dto
 open Skills.Infrastructure.UserSkillsRepo
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open System.Threading.Tasks

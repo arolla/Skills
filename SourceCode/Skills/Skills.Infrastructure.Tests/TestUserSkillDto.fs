@@ -3,7 +3,7 @@
 open System
 open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
-open Skills.Infrastructure.UserSkillEvaluation
+open Skills.Infrastructure.Dto
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure.UserSkillDto
 

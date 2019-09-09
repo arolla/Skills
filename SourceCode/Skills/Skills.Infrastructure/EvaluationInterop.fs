@@ -7,9 +7,9 @@ open EventRepo
 open EventSender
 open System
 open Newtonsoft.Json
+open Skills.Infrastructure.Dto
 
 module EvaluationInterop =
-
     
     type UserEvalutationDto = {
         date: DateTime

@@ -1,15 +1,10 @@
 ﻿namespace Skills.Infrastructure
 
-open Skills.Infrastructure.UserSkillEvaluation
 open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
+open Skills.Infrastructure.Dto
 
 module UserSkillDto =
-    
-    type UserSkillDto = {
-        user : UserDto
-        evaluation : EvaluationDto
-    }
 
     let toDomain (dto:UserSkillDto) : Result<UserSkill, string> =
         let userResult = User.create dto.user.name

@@ -5,6 +5,8 @@ open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.VisualStudio.TestTools.UnitTesting
+open Skills.Infrastructure
+open Skills.Infrastructure.Dto
 
 [<TestClass>]
 type TestUserSkillEvaluation () =
@@ -124,13 +126,11 @@ type TestUserSkillEvaluation () =
             date = DateTime(2019, 08,23)
             level = 3
         }
-
         let evaluation:Evaluation = {
             skill = Skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
             level = Level 3
         }
-
         let skills : UserSkills = {
                 user = {
                     name = UserName jackName
@@ -139,9 +139,7 @@ type TestUserSkillEvaluation () =
                     evaluation
                 ]
         }
-
         let expected = convertSkills skills
-
         let readSkills jackName = async {
             return Some({
                 user = {
@@ -150,7 +148,6 @@ type TestUserSkillEvaluation () =
                 evaluations = Array.empty
             })
         }
-
         let saveSkills skills = async {
             Assert.AreEqual(expected, skills)
             return Ok ()

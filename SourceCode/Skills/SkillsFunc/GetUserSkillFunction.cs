@@ -8,8 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 using System.Threading.Tasks;
-
-using static Skills.Infrastructure.UserSkillEvaluation;
+using static Skills.Infrastructure.Dto;
 using static Skills.Infrastructure.UserSkillsInterop;
 
 namespace SkillsFunc

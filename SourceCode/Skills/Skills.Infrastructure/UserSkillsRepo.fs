@@ -4,6 +4,7 @@ open System
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
+open Skills.Infrastructure.Dto
 open System.Threading.Tasks
 
 module UserSkillsRepo =

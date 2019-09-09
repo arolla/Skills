@@ -5,22 +5,18 @@ open Skills.Domain
 open Skills.Domain.Event
 open UserSkillEvaluation
 open Newtonsoft.Json
+open Skills.Infrastructure.Dto
+
+type EvaluationAddedDto = {
+    date: DateTime
+    data: string
+    eventType: string
+}
 
 module EventStore =
     
-    type EvaluationAddedDto = {
-        date: DateTime
-        data: string
-        eventType: string
-    }
-    type UserSkillDto = {
-        user : UserDto
-        evaluation : EvaluationDto
-    }
-
     type private SaveEvent = EvaluationAddedDto -> Async<Result<unit, exn>>
     type private Enqueue = EvaluationAddedDto -> Async<Result<unit, exn>>
-
 
     let convertToDto (domainEvent:EvaluationAdded) =
         

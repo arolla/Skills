@@ -2,9 +2,9 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using static Skills.Infrastructure.EventStore;
 using static Skills.Infrastructure.EvaluationInterop;
 using System.Threading.Tasks;
+using Skills.Infrastructure;
 
 namespace SkillsFunc
 {
