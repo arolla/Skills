@@ -10,10 +10,7 @@ open Newtonsoft.Json
 
 module EvaluationInterop =
 
-    type UserSkillDto = {
-        user : UserDto
-        evaluation : EvaluationDto
-    }
+    
     type UserEvalutationDto = {
         date: DateTime
         User: UserDto
@@ -29,7 +26,7 @@ module EvaluationInterop =
         let saveSkills = saveUsersSkills connectionString
 
         async{
-            match! addEvaluation readSkills saveSkills user.user user.evaluation with
+            match! addEvaluation_ToDelete readSkills saveSkills user.user user.evaluation with
             | Ok _      -> ()
             | Error exn -> raise exn
         }

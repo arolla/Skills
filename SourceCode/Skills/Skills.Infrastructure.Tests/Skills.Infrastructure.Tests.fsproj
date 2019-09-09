@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="TestUserSkillDto.fs" />
     <Compile Include="TestEvaluationInterop.fs" />
     <Compile Include="TestEventSender.fs" />
     <Compile Include="TestEventStore.fs" />

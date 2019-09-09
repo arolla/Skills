@@ -1,9 +1,9 @@
 ﻿namespace Skills.Infrastructure
 
 open System
+open Skills.Domain
 open Skills.Domain.Event
 open UserSkillEvaluation
-open Skills.Domain.UserSkillEvaluation
 open Newtonsoft.Json
 
 module EventStore =

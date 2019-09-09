@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="UserSkillEvaluation.fs" />
+    <Compile Include="UserSkillDto.fs" />
     <Compile Include="UserSkillsRepo.fs" />
     <Compile Include="EventStore.fs" />
     <Compile Include="EventRepo.fs" />

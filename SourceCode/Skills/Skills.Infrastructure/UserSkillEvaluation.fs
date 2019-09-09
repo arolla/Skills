@@ -3,6 +3,7 @@ namespace Skills.Infrastructure
 open System
 open Skills.Domain.UserSkillEvaluation
 open Newtonsoft.Json
+open Skills.Domain
 
 module UserSkillEvaluation =
     
@@ -24,7 +25,7 @@ module UserSkillEvaluation =
         user : UserDto
         evaluations : EvaluationDto []
     }
-
+    
     type private ReadSkills = string -> Async<UserSkillsDto option>
     type private SaveSkills = UserSkillsDto -> Async<Result<unit, exn>>
 
@@ -67,8 +68,7 @@ module UserSkillEvaluation =
     let deserializeUserSkills jsonContent =
         JsonConvert.DeserializeObject<UserSkillsDto>(jsonContent)
 
-
-    let addEvaluation (readSkills:ReadSkills) (saveSkills:SaveSkills) (user:UserDto) (evaluation:EvaluationDto) =
+    let addEvaluation_ToDelete (readSkills:ReadSkills) (saveSkills:SaveSkills) (user:UserDto) (evaluation:EvaluationDto) =
         let domainEvaluation : Evaluation = {
             skill = Skill(evaluation.skill)
             date = EvaluationDate(evaluation.date)
@@ -86,7 +86,7 @@ module UserSkillEvaluation =
                     }
                 | Some(userSkill) -> userSkill
                 |> convertDtoSkills 
-                |> addEvaluation domainEvaluation
+                |> addEvaluationToUserSkills domainEvaluation
                 |> convertSkills
                 |> saveSkills
         }

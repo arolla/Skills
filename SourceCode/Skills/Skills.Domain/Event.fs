@@ -2,6 +2,7 @@
 
 open System
 open UserSkillEvaluation
+open Evaluation
 
 module Event =
     type EventDate = EventDate of DateTime

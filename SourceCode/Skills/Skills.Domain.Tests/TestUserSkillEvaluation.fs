@@ -1,6 +1,7 @@
 namespace Skills.Domain.Tests
 
 open Skills.Domain.UserSkillEvaluation
+open Skills.Domain
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 
@@ -24,7 +25,7 @@ type TestUserSkillEvaluation () =
             evaluations = []
         }
 
-        let modifiedUserSkills = addEvaluation evaluation userSkills
+        let modifiedUserSkills = addEvaluationToUserSkills evaluation userSkills
         Assert.AreNotSame(modifiedUserSkills, userSkills)
         Assert.AreEqual(modifiedUserSkills.user, user)
         let exists =

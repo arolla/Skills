@@ -5,6 +5,7 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Domain.Event
 open Skills.Infrastructure.EventStore
 open Skills.Domain.UserSkillEvaluation
+open Skills.Domain
 
 [<TestClass>]
 type TestEventStore () =

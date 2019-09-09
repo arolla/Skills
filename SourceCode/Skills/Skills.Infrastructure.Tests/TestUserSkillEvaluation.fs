@@ -2,6 +2,7 @@ namespace Skills.Infrastructure.Tests
 
 open System
 open Skills.Domain.UserSkillEvaluation
+open Skills.Domain
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.VisualStudio.TestTools.UnitTesting
 
@@ -155,5 +156,5 @@ type TestUserSkillEvaluation () =
             return Ok ()
         }
 
-        addEvaluation readSkills saveSkills jack evaluationDto |> ignore
-        
+        addEvaluation_ToDelete readSkills saveSkills jack evaluationDto |> ignore
+    

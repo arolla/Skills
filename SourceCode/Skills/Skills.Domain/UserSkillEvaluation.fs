@@ -4,24 +4,17 @@ open System
 
 module UserSkillEvaluation =
     
-    type Level = Level of int   
-    
-    type Skill = Skill of string 
-    
-    type EvaluationDate = EvaluationDate  of DateTime
-        
-    type Evaluation = {
-        skill : Skill
-        date : EvaluationDate
-        level : Level
-    }
-    
     type UserName = UserName of string
 
     type User = {
         name : UserName
     }
     
+    type UserSkill = {
+        user : User
+        evaluation : Evaluation
+    }
+
     type UserSkills = {
         user : User
         evaluations : Evaluation list
@@ -44,7 +37,7 @@ module UserSkillEvaluation =
             |> Result.map (fun userName -> {name = userName})
             
     
-    let addEvaluation evaluation userSkills = 
+    let addEvaluationToUserSkills evaluation userSkills = 
         {
             userSkills with evaluations = evaluation :: userSkills.evaluations 
         }
