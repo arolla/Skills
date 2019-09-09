@@ -76,3 +76,23 @@ module UserSkillEvaluation =
                 |> convertSkills
                 |> saveSkills
         }
+    
+    let addEvaluation readUserSkills saveUserSkills (event : EvaluationAddedDto) =
+        let userSkill = JsonConvert.DeserializeObject<UserSkillDto> event.data
+        let evaluationResult = 
+            Evaluation.create 
+                userSkill.evaluation.skill 
+                userSkill.evaluation.level
+                userSkill.evaluation.date
+        match evaluationResult with
+        | Error message -> Error message
+        | Ok evaluation ->
+        let userResult = User.create userSkill.user.name
+        match userResult with
+        | Error message -> Error message
+        | Ok user ->
+        UserSkillEvaluation.addEvaluation
+            readUserSkills
+            saveUserSkills
+            user
+            evaluation

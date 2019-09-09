@@ -48,3 +48,10 @@ module UserSkillEvaluation =
         | None -> { user = user; evaluations = []}
         | Some userSkills -> userSkills
     
+    let addEvaluation readSkills saveSkills user evaluation =
+        let userSkillsResult = readSkills user
+        match userSkillsResult with
+        | Error message -> Error message
+        | Ok userSkills ->
+        addEvaluationToUserSkills evaluation userSkills
+        |> saveSkills

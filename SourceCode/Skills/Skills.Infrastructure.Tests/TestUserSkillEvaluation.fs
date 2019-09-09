@@ -155,3 +155,34 @@ type TestUserSkillEvaluation () =
 
         addEvaluation_ToDelete readSkills saveSkills jack evaluationDto |> ignore
     
+    [<TestMethod>]
+       member this.``Given EvaluationAdded dto event When I add a new evaluation Then this lastest is added to the user skills``() =
+           let event = {
+               date = DateTime(2019, 09, 09)
+               eventType = "EvaluationAddedDto"
+               data = """{"evaluation":{"date":"2019-08-30T00:00:00","level":3,"skill":"csharp"},"user":{"name":"Jack"}}""" // UserSkillDto
+           }       
+           let jackName = "Jack"
+           let evaluation:Evaluation = {
+               skill = Skill "csharp"
+               date = EvaluationDate(DateTime(2019, 08, 30))
+               level = Level 3
+           }
+           let expectedUserSkills : UserSkills = {
+               user = {
+                   name = UserName jackName
+               }
+               evaluations = [
+                   evaluation
+               ]
+           }
+           let saveUserSkills userSkills = 
+               Assert.AreEqual(expectedUserSkills, userSkills)
+               Ok ()
+           let readUserSkills user = 
+               let userSkills : UserSkills = {
+                   user = user
+                   evaluations = List.empty
+               }
+               Ok userSkills
+           addEvaluation readUserSkills saveUserSkills event |> ignore
