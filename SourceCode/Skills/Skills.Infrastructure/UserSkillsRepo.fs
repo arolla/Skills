@@ -6,6 +6,7 @@ open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
 open Skills.Infrastructure.Dto
 open System.Threading.Tasks
+open Skills.Domain.UserSkillEvaluation
 
 module UserSkillsRepo =
 
@@ -23,10 +24,14 @@ module UserSkillsRepo =
         let table = tableClient.GetTableReference(userSkillsTable)
         table
 
-    let saveUsersSkills connectionString (userSkills : UserSkillsDto) =
+    let saveUsersSkills connectionString userSkills =
         let table = connectionString |> getUserSkillsTable 
-        let jsonUserSkills = serializeSkills userSkills
-        let insertOperation = TableOperation.InsertOrReplace(new UserSkillsEntity(userSkills.user.name, jsonUserSkills))
+        let userName = UserName.value userSkills.user.name
+        let jsonUserSkills = 
+            userSkills
+            |> UserSkillsDto.fromDomain
+            |> serializeSkills
+        let insertOperation = TableOperation.InsertOrReplace( UserSkillsEntity(userName, jsonUserSkills))
         async {
             try
                 let! _ = Async.AwaitTask (table.ExecuteAsync(insertOperation))
@@ -42,12 +47,29 @@ module UserSkillsRepo =
             match option with 
             | None -> return None
             | Some(userSkill) -> 
-                let jsonUserSkills = (userSkill :?> UserSkillsEntity).userSkills
+                let userSkill = userSkill :?> UserSkillsEntity
+                let jsonUserSkills = userSkill.userSkills
                 return (deserializeUserSkills jsonUserSkills) |> Some
         }
 
-    let readUsersSkills connectionString userName : Async<UserSkillsDto option> =
+
+    let getUsersSkillsFromDb connectionString userName : Async<UserSkillsDto option> =
         let table = connectionString |> getUserSkillsTable 
         let selectOperation = TableOperation.Retrieve<UserSkillsEntity>(partitionKey, userName)
         let executeOperation = table.ExecuteAsync(selectOperation)
         read executeOperation
+
+    let readUserSkills connectionString user =
+        let userName = UserName.value user.name
+        let userSkillsOrDefault userSkillsOpt : UserSkillsDto = 
+            match userSkillsOpt with
+            | None -> {user = {name = userName}; evaluations = Array.empty}
+            | Some userSkills -> userSkills
+
+        async{
+            let! userSkills = getUsersSkillsFromDb connectionString userName
+            return
+                userSkills
+                |> userSkillsOrDefault
+                |> UserSkillsDto.toDomain
+            }

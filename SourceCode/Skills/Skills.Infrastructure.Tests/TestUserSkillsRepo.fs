@@ -27,7 +27,7 @@ type TestUserSkillsRepo () =
 
         let connectionString = ""
 
-        let usersSkills = readUsersSkills connectionString tomName
+        let usersSkills = getUsersSkillsFromDb connectionString tomName
         async {
             match! usersSkills with
             | None -> Assert.Fail("Should not be null...")

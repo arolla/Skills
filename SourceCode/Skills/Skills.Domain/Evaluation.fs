@@ -1,11 +1,5 @@
 ﻿namespace Skills.Domain
 
-open System
-open Skill
-open Level
-
-type EvaluationDate = EvaluationDate  of DateTime
-
 type Evaluation = {
     skill : Skill
     date : EvaluationDate

@@ -21,14 +21,15 @@ module EvaluationInterop =
         JsonConvert.DeserializeObject<UserSkillDto>(event.data)        
 
     let AddEvaluationAsync connectionString event =
-        let user = GetUserSkillFromEvent event 
-        let readSkills = readUsersSkills connectionString
+        let readSkills = readUserSkills connectionString
         let saveSkills = saveUsersSkills connectionString
 
         async{
-            match! addEvaluation_ToDelete readSkills saveSkills user.user user.evaluation with
+            match! addEvaluation readSkills saveSkills event with
             | Ok _      -> ()
-            | Error exn -> raise exn
+            | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.SaveException exn) -> raise exn
+            | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.ReadUserSkillsErrors errors) -> 
+                errors |> String.concat ", " |> exn |> raise
         }
         |> Async.StartImmediateAsTask :> System.Threading.Tasks.Task
 

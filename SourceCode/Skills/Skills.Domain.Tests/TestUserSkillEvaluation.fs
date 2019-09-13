@@ -137,61 +137,98 @@ type TestUserSkillEvaluation () =
         Assert.AreEqual(jackSkills, foundJackSkills)
     
     [<TestMethod>]
-       member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
-           let jackName = "Jack"
-           let jack:User = {
-               name = UserName jackName
-           }
-           let evaluation:Evaluation = {
-               skill = Skill "csharp"
-               date = EvaluationDate(DateTime(2019, 08,23))
-               level = Level 3
-           }
-           let expectedUserSkills : UserSkills = {
-                   user = {
-                       name = UserName jackName
-                   }
-                   evaluations = [
-                       evaluation
-                   ]
-           }
-           let readSkills jack = 
-               Ok {
-                   user = jack
-                   evaluations = List.empty
-               }       
-           let saveSkills skills = 
-               Assert.AreEqual(expectedUserSkills, skills)
-               Ok ()
+    member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
+        let jackName = "Jack"
+        let jack:User = {
+            name = UserName jackName
+        }
+        let evaluation:Evaluation = {
+            skill = Skill "csharp"
+            date = EvaluationDate(DateTime(2019, 08,23))
+            level = Level 3
+        }
+        let expectedUserSkills : UserSkills = {
+                user = {
+                    name = UserName jackName
+                }
+                evaluations = [
+                    evaluation
+                ]
+        }
+        let readSkills jack = async {
+                return Ok {
+                    user = jack
+                    evaluations = List.empty
+                }       
+            }
+        let saveSkills skills = async {
+                Assert.AreEqual(expectedUserSkills, skills)
+                return Ok ()
+            }
        
-           addEvaluation readSkills saveSkills jack evaluation |> ignore
+        addEvaluation readSkills saveSkills jack evaluation |> ignore
 
-       [<TestMethod>]
-       member this.``Given an error skills read When I would add the evaluation to the user skills Then Error should be returned``() =
-           let jack:User = {
-               name = UserName "Jack"
-           }
-           let evaluation:Evaluation = {
-               skill = Skill "csharp"
-               date = EvaluationDate(DateTime(2019, 08,23))
-               level = Level 3
-           }
-           let readSkills jack = 
-               sprintf "Problem when reading skills of %A" jack
-               |> Error
+    [<TestMethod>]
+    member this.``Given an error skills read When I would add the evaluation to the user skills Then Error should be returned``() =
+        let jack:User = {
+            name = UserName "Jack"
+        }
+        let evaluation:Evaluation = {
+            skill = Skill "csharp"
+            date = EvaluationDate(DateTime(2019, 08,23))
+            level = Level 3
+        }
+        let readSkills jack = async{
+                return
+                    sprintf "Problem when reading skills of %A" jack
+                    |> List.singleton
+                    |> Error
+            }
    
-           let saveSkills _ =
-               Ok ()
+        let saveSkills _ =
+            async{return Ok ()}
    
-           let result = addEvaluation readSkills saveSkills jack evaluation
-           match result with 
-           | Error message -> 
-               let expectedMessage = 
-                   sprintf 
-                       "Problem when reading skills of %A"
-                       jack
-               Assert.AreEqual(expectedMessage, message)
-           | Ok _ -> Assert.Fail "Should not add an evaluation to the user"
+        async{
+            match! addEvaluation readSkills saveSkills jack evaluation with 
+            | Error (AddEvaluationError.ReadUserSkillsErrors messages) -> 
+                let expectedMessage = 
+                    sprintf 
+                        "Problem when reading skills of %A"
+                        jack
+                let result = messages |> List.exists (fun m -> m = expectedMessage)
+                Assert.IsTrue(result)
+            | _ -> Assert.Fail "Should not add an evaluation to the user"
+        } |> Async.RunSynchronously
+
+
+    [<TestMethod>]
+    member this.``Given an error on skills save When I would add the evaluation to the user skills Then Error should be returned``() =
+        let jack:User = {
+            name = UserName "Jack"
+        }
+        let evaluation:Evaluation = {
+            skill = Skill "csharp"
+            date = EvaluationDate(DateTime(2019, 08,23))
+            level = Level 3
+        }
+        let expectedExceptionMessage = "My amazing expected exception message"
+        let readSkills jack = async {
+                return Ok {
+                    user = jack
+                    evaluations = List.empty
+                }       
+            }
+   
+        let saveSkills _ =
+            async{return expectedExceptionMessage |> exn |> Error}
+   
+        async{
+                match! addEvaluation readSkills saveSkills jack evaluation with 
+                | Error (AddEvaluationError.SaveException exn) -> 
+                    Assert.AreEqual(expectedExceptionMessage, exn.Message)
+                | _ -> Assert.Fail "Should not add an evaluation to the user"
+        } |> Async.RunSynchronously
+
 
        [<TestMethod>]
        member this.``Given an error skills save When I would add the evaluation to the user skills Then Error should be returned``() =
@@ -203,25 +240,32 @@ type TestUserSkillEvaluation () =
                date = EvaluationDate(DateTime(2019, 08,23))
                level = Level 3
            }
-           let readSkills jack = 
-               Ok {
-                   user = jack
-                   evaluations = List.empty
+           let readSkills jack = async{
+                   return Ok {
+                       user = jack
+                       evaluations = List.empty
+                   }
+                }
+           let saveSkills userSkill = async{
+                   return
+                       sprintf "Problem when saving user skills of %A" userSkill
+                       |> exn
+                       |> Error
                }
-           let saveSkills userSkill =
-               sprintf "Problem when saving user skills of %A" userSkill
-               |> Error
            let expectedUserSkillsToSave = {
                user = jack
                evaluations = [evaluation]
            }
 
-           let result = addEvaluation readSkills saveSkills jack evaluation
-           match result with 
-           | Error message -> 
-               let expectedMessage = 
-                   sprintf 
-                       "Problem when saving user skills of %A"
-                       expectedUserSkillsToSave
-               Assert.AreEqual(expectedMessage, message)
-           | Ok _ -> Assert.Fail "Should not add an evaluation to the user"
+           async{
+               let! result = addEvaluation readSkills saveSkills jack evaluation
+               match result with 
+               | Error message -> 
+                   let expectedMessage = 
+                       sprintf 
+                           "Problem when saving user skills of %A"
+                           expectedUserSkillsToSave
+                   Assert.AreEqual(expectedMessage, message)
+               | Ok _ -> Assert.Fail "Should not add an evaluation to the user"
+
+           }

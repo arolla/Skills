@@ -48,10 +48,22 @@ module UserSkillEvaluation =
         | None -> { user = user; evaluations = []}
         | Some userSkills -> userSkills
     
+
+    type AddEvaluationError =
+    | SaveException of except: exn
+    | ReadUserSkillsErrors of errors: string list
+
     let addEvaluation readSkills saveSkills user evaluation =
-        let userSkillsResult = readSkills user
-        match userSkillsResult with
-        | Error message -> Error message
-        | Ok userSkills ->
-        addEvaluationToUserSkills evaluation userSkills
-        |> saveSkills
+        async {
+            match! readSkills user with
+            | Ok userSkills -> 
+                return! async {
+                    let! result = 
+                        addEvaluationToUserSkills evaluation userSkills 
+                        |> saveSkills
+                    return result 
+                    |> Result.mapError (fun err -> SaveException err)
+                }
+            | Error errors -> 
+                return errors |> ReadUserSkillsErrors |> Error
+        }

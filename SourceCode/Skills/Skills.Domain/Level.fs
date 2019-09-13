@@ -11,3 +11,8 @@ module Level =
             sprintf "Level should be between %i and %i (%i)" MIN_LEVEL MAX_LEVEL level |> Error
         else
             Level level |> Ok
+
+
+    let value level =
+        let (Level value) = level
+        value

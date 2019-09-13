@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <Compile Include="Dto.fs" />
+    <Compile Include="EvaluationDto.fs" />
     <Compile Include="UserSkillDto.fs" />
     <Compile Include="EventStore.fs" />
     <Compile Include="UserSkillEvaluation.fs" />
+    <Compile Include="UserSkillsDto.fs" />
     <Compile Include="UserSkillsRepo.fs" />
     <Compile Include="EventRepo.fs" />
     <Compile Include="EventSender.fs" />

@@ -112,48 +112,9 @@ type TestUserSkillEvaluation () =
 
         let jsonContent = serializeSkills usersSkills
 
-        let expectedJson = @"[{""user"":{""name"":""Tom""},""evaluations"":[{""skill"":""csharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]},{""user"":{""name"":""Jack""},""evaluations"":[{""skill"":""fsharp"",""date"":""2019-08-23T00:00:00"",""level"":3}]}]"
+        let expectedJson = """[{"user":{"name":"Tom"},"evaluations":[{"skill":"csharp","date":"2019-08-23T00:00:00","level":3}]},{"user":{"name":"Jack"},"evaluations":[{"skill":"fsharp","date":"2019-08-23T00:00:00","level":3}]}]"""
         Assert.AreEqual(expectedJson, jsonContent)
 
-    [<TestMethod>]
-    member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
-        let jackName = "Jack"
-        let jack:UserDto = {
-            name = jackName
-        }
-        let evaluationDto:EvaluationDto = {
-            skill = "csharp"
-            date = DateTime(2019, 08,23)
-            level = 3
-        }
-        let evaluation:Evaluation = {
-            skill = Skill "csharp"
-            date = EvaluationDate(DateTime(2019, 08,23))
-            level = Level 3
-        }
-        let skills : UserSkills = {
-                user = {
-                    name = UserName jackName
-                }
-                evaluations = [
-                    evaluation
-                ]
-        }
-        let expected = convertSkills skills
-        let readSkills jackName = async {
-            return Some({
-                user = {
-                    name = jackName
-                }
-                evaluations = Array.empty
-            })
-        }
-        let saveSkills skills = async {
-            Assert.AreEqual(expected, skills)
-            return Ok ()
-        }
-
-        addEvaluation_ToDelete readSkills saveSkills jack evaluationDto |> ignore
     
     [<TestMethod>]
        member this.``Given EvaluationAdded dto event When I add a new evaluation Then this lastest is added to the user skills``() =
@@ -176,13 +137,16 @@ type TestUserSkillEvaluation () =
                    evaluation
                ]
            }
-           let saveUserSkills userSkills = 
+           let saveUserSkills userSkills = async{
                Assert.AreEqual(expectedUserSkills, userSkills)
-               Ok ()
-           let readUserSkills user = 
+               return Ok ()
+           }
+           let readUserSkills user = async{
                let userSkills : UserSkills = {
                    user = user
                    evaluations = List.empty
                }
-               Ok userSkills
-           addEvaluation readUserSkills saveUserSkills event |> ignore
+               return Ok userSkills
+           }
+           
+           addEvaluation readUserSkills saveUserSkills event |> Async.RunSynchronously

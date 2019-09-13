@@ -11,11 +11,6 @@ module UserSkillEvaluation =
         let fromDto (dto:UserDto) =
             User.create dto.name
     
-    
-    type private ReadSkills = string -> Async<UserSkillsDto option>
-    type private SaveSkills = UserSkillsDto -> Async<Result<unit, exn>>
-
-
     let convertSkills (userSkills: UserSkills) : UserSkillsDto =
         let (UserName name) = userSkills.user.name
         let toUserDto (user: User) =
@@ -54,30 +49,11 @@ module UserSkillEvaluation =
     let deserializeUserSkills jsonContent =
         JsonConvert.DeserializeObject<UserSkillsDto>(jsonContent)
 
-    let addEvaluation_ToDelete (readSkills:ReadSkills) (saveSkills:SaveSkills) (user:UserDto) (evaluation:EvaluationDto) =
-        let domainEvaluation : Evaluation = {
-            skill = Skill(evaluation.skill)
-            date = EvaluationDate(evaluation.date)
-            level = Level(evaluation.level)
-        }
-
-        async{
-            let! userSkills = readSkills user.name 
-            return!
-                match userSkills with
-                | None -> 
-                    {
-                        user = { name = user.name }
-                        evaluations = [||] // empty array
-                    }
-                | Some(userSkill) -> userSkill
-                |> convertDtoSkills 
-                |> addEvaluationToUserSkills domainEvaluation
-                |> convertSkills
-                |> saveSkills
-        }
     
     let addEvaluation readUserSkills saveUserSkills (event : EvaluationAddedDto) =
+        let toAsyncEvaluationError message =
+            async { return message |> exn |> SaveException |> Error }
+
         let userSkill = JsonConvert.DeserializeObject<UserSkillDto> event.data
         let evaluationResult = 
             Evaluation.create 
@@ -85,11 +61,11 @@ module UserSkillEvaluation =
                 userSkill.evaluation.level
                 userSkill.evaluation.date
         match evaluationResult with
-        | Error message -> Error message
+        | Error message -> toAsyncEvaluationError message
         | Ok evaluation ->
         let userResult = User.create userSkill.user.name
         match userResult with
-        | Error message -> Error message
+        | Error message -> toAsyncEvaluationError message
         | Ok user ->
         UserSkillEvaluation.addEvaluation
             readUserSkills

@@ -11,3 +11,7 @@ module Skill =
             sprintf "Skill is not valid (%s)" skill |> Error
         else
             Skill skill |> Ok
+
+    let value skill =
+        let (Skill value) = skill
+        value
