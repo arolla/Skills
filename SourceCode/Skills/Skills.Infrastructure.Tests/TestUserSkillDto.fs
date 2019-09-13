@@ -122,7 +122,7 @@ type TestUserSkillDto () =
         }
         let userSkillResult = toDomain userSkillDto
         let expectedUserSkill : UserSkill = {
-            user = {name = UserName userName }
+            user = {name = Helpers.userName userName }
             evaluation = {
                 skill = Skill "fsharp"
                 date = EvaluationDate( DateTime(2019, 09, 09))

@@ -8,6 +8,12 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 [<TestClass>]
 type TestUserSkillEvaluation () =
 
+    let userName name =
+        match UserName.create name with
+        | Error _ -> "Unable to create a username" |> failwith
+        | Ok username -> username
+        
+
     [<TestMethod>]
     member this.``Given an evaluation and a user When Add evaluation to the user given Then return user skills with the evaluation added `` () =
             
@@ -17,7 +23,7 @@ type TestUserSkillEvaluation () =
             level = Level 3
         }
         let user = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
 
         let userSkills = {
@@ -36,7 +42,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given no user skills When I would find the user skills Then I get no evaluation for this user``() =
         let jack = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
 
         let usersSkills = []
@@ -49,7 +55,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given skills of my user When I would find my user skills Then I get the existing user skills``() =
         let jack = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
 
         let usersSkills = [
@@ -72,11 +78,11 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given skills of other user When I would find my user skills Then I get no skills``() =
         let jack = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
 
         let tom = {
-            name = UserName "Tom"
+            name = userName "Tom"
         }
 
         let usersSkills = [
@@ -100,7 +106,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given many users skills (including mine) When I would find my user skills Then I get the existing user skills``() =
         let jack = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
         
         let jackSkills = {
@@ -115,7 +121,7 @@ type TestUserSkillEvaluation () =
         }
 
         let tom = {
-            name = UserName "Tom"
+            name = userName "Tom"
         }
 
         let usersSkills = [
@@ -140,7 +146,7 @@ type TestUserSkillEvaluation () =
     member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
         let jackName = "Jack"
         let jack:User = {
-            name = UserName jackName
+            name = userName jackName
         }
         let evaluation:Evaluation = {
             skill = Skill "csharp"
@@ -149,7 +155,7 @@ type TestUserSkillEvaluation () =
         }
         let expectedUserSkills : UserSkills = {
                 user = {
-                    name = UserName jackName
+                    name = userName jackName
                 }
                 evaluations = [
                     evaluation
@@ -171,7 +177,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given an error skills read When I would add the evaluation to the user skills Then Error should be returned``() =
         let jack:User = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
         let evaluation:Evaluation = {
             skill = Skill "csharp"
@@ -204,7 +210,7 @@ type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given an error on skills save When I would add the evaluation to the user skills Then Error should be returned``() =
         let jack:User = {
-            name = UserName "Jack"
+            name = userName "Jack"
         }
         let evaluation:Evaluation = {
             skill = Skill "csharp"
@@ -233,7 +239,7 @@ type TestUserSkillEvaluation () =
        [<TestMethod>]
        member this.``Given an error skills save When I would add the evaluation to the user skills Then Error should be returned``() =
            let jack:User = {
-               name = UserName "Jack"
+               name = userName "Jack"
            }
            let evaluation:Evaluation = {
                skill = Skill "csharp"

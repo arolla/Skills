@@ -15,15 +15,11 @@ type EvaluationAddedDto = {
 
 module EventStore =
     
-    type private SaveEvent = EvaluationAddedDto -> Async<Result<unit, exn>>
-    type private Enqueue = EvaluationAddedDto -> Async<Result<unit, exn>>
-
     let convertToDto (domainEvent:EvaluationAdded) =
         
         let ({skill = Skill skill; level = Level level; date = EvaluationDate date} : Evaluation) = domainEvent.evaluation
-        let (UserName name) = domainEvent.user.name
         let userSkill = {
-            user = {name = name}
+            user = {name = UserName.value domainEvent.user.name}
             evaluation = { skill = skill; level = level; date = date }
         }
 
@@ -36,7 +32,7 @@ module EventStore =
             eventType = typeof<EvaluationAdded>.Name
         }
 
-    let addEvent (saveEvent:SaveEvent) (enqueue: Enqueue) evaluationAddedDto =
+    let addEvent saveEvent enqueue evaluationAddedDto =
         async {
             let! r = saveEvent evaluationAddedDto
             match r with

@@ -12,9 +12,8 @@ module UserSkillEvaluation =
             User.create dto.name
     
     let convertSkills (userSkills: UserSkills) : UserSkillsDto =
-        let (UserName name) = userSkills.user.name
         let toUserDto (user: User) =
-            {name = name}
+            {name = UserName.value user.name}
         let toEvaluationsDto ({skill = Skill skill; date = EvaluationDate date; level = Level level}: Evaluation) =
             {
                 skill = skill
@@ -27,9 +26,7 @@ module UserSkillEvaluation =
             evaluations = userSkills.evaluations |> Array.ofList |> Array.map toEvaluationsDto 
         }
 
-    let convertDtoSkills (userSkills: UserSkillsDto): UserSkills =
-        let fromUserDto (user: UserDto) : User =
-            {name = UserName user.name}
+    let convertDtoSkills (userSkills: UserSkillsDto) : Result<UserSkills, string> =
 
         let fromEvaluationsDto ({skill = skill; date = date; level = level}: EvaluationDto) : Evaluation =
             {
@@ -37,11 +34,15 @@ module UserSkillEvaluation =
                 date = EvaluationDate date
                 level = Level level
             }
-           
-        {
-            user = fromUserDto userSkills.user
-            evaluations = Array.map fromEvaluationsDto userSkills.evaluations |> List.ofArray
-        }
+            
+        UserDto.toDomain userSkills.user
+        |> Result.map (fun user ->
+            {
+                user = user
+                // TODO : to update to use Evaluation.fromDto
+                evaluations = userSkills.evaluations |> Array.map fromEvaluationsDto  |> List.ofArray
+            })        
+
 
     let serializeSkills usersSkills =
         JsonConvert.SerializeObject(usersSkills)

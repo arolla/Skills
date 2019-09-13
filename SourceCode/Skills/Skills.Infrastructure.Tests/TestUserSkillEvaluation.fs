@@ -15,7 +15,7 @@ type TestUserSkillEvaluation () =
         let usersSkills : UserSkills = 
             {
                 user = {
-                    name = UserName "Tom"
+                    name = Helpers.userName "Tom"
                 }
                 evaluations = [
                     {
@@ -63,10 +63,10 @@ type TestUserSkillEvaluation () =
 
         let convertedSkills = convertDtoSkills userSkillsDto
 
-        let expectedUserSkills : UserSkills = 
-            {
+        let expectedUserSkills : Result<UserSkills, string> = 
+            let userSkills:UserSkills = {
                 user = {
-                    name = UserName "Tom"
+                    name = Helpers.userName "Tom"
                 }
                 evaluations = [
                     {
@@ -76,6 +76,7 @@ type TestUserSkillEvaluation () =
                     }
                 ]
             }
+            userSkills |> Ok
 
         Assert.AreEqual(expectedUserSkills, convertedSkills)
 
@@ -131,7 +132,7 @@ type TestUserSkillEvaluation () =
            }
            let expectedUserSkills : UserSkills = {
                user = {
-                   name = UserName jackName
+                   name = Helpers.userName jackName
                }
                evaluations = [
                    evaluation

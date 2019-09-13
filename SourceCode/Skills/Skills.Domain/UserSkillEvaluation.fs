@@ -4,7 +4,7 @@ open System
 
 module UserSkillEvaluation =
     
-    type UserName = UserName of string
+    type UserName = private UserName of string
 
     type User = {
         name : UserName

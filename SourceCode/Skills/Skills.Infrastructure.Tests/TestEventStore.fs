@@ -33,7 +33,7 @@ type TestEventStore () =
         let now = DateTime.Now
         let evaluationAddedEvent:EvaluationAdded = {
             date = EventDate(now)
-            user = {name = UserName "Machin"}
+            user = {name = Helpers.userName "Machin"}
             evaluation = {
                 skill = Skill "poterie"
                 level = Level 4
