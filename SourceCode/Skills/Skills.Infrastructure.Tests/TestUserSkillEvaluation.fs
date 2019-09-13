@@ -7,6 +7,7 @@ open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure
 open Skills.Infrastructure.Dto
+open Helpers
 
 [<TestClass>]
 type TestUserSkillEvaluation () =
@@ -21,7 +22,7 @@ type TestUserSkillEvaluation () =
                     {
                         skill = Skill "csharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
+                        level = level 3
                     }
                 ]
             }
@@ -63,7 +64,7 @@ type TestUserSkillEvaluation () =
 
         let convertedSkills = convertDtoSkills userSkillsDto
 
-        let expectedUserSkills : Result<UserSkills, string> = 
+        let expectedUserSkills : Result<UserSkills, string list> = 
             let userSkills:UserSkills = {
                 user = {
                     name = Helpers.userName "Tom"
@@ -72,7 +73,7 @@ type TestUserSkillEvaluation () =
                     {
                         skill = Skill "csharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
+                        level = level 3
                     }
                 ]
             }
@@ -128,7 +129,7 @@ type TestUserSkillEvaluation () =
            let evaluation:Evaluation = {
                skill = Skill "csharp"
                date = EvaluationDate(DateTime(2019, 08, 30))
-               level = Level 3
+               level = level 3
            }
            let expectedUserSkills : UserSkills = {
                user = {

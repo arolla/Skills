@@ -14,11 +14,11 @@ module UserSkillEvaluation =
     let convertSkills (userSkills: UserSkills) : UserSkillsDto =
         let toUserDto (user: User) =
             {name = UserName.value user.name}
-        let toEvaluationsDto ({skill = Skill skill; date = EvaluationDate date; level = Level level}: Evaluation) =
+        let toEvaluationsDto ({skill = Skill skill; date = EvaluationDate date; level = level}: Evaluation) =
             {
                 skill = skill
                 date = date
-                level = level
+                level = Level.value level
             }
         
         {
@@ -26,22 +26,31 @@ module UserSkillEvaluation =
             evaluations = userSkills.evaluations |> Array.ofList |> Array.map toEvaluationsDto 
         }
 
-    let convertDtoSkills (userSkills: UserSkillsDto) : Result<UserSkills, string> =
-
-        let fromEvaluationsDto ({skill = skill; date = date; level = level}: EvaluationDto) : Evaluation =
-            {
-                skill = Skill skill
-                date = EvaluationDate date
-                level = Level level
-            }
+    let convertDtoSkills (userSkills: UserSkillsDto) : Result<UserSkills, string list> =
             
-        UserDto.toDomain userSkills.user
-        |> Result.map (fun user ->
-            {
+        let userResult = UserDto.toDomain userSkills.user
+        let evaluations = 
+            userSkills.evaluations 
+            |> Array.map EvaluationDto.toDomain
+            |> Array.fold (fun acc res ->
+                match acc, res with
+                | Ok evals, Ok(eval)        -> Ok (eval :: evals)
+                | Ok _, Error(error)        -> Error([error])
+                | Error errors, Ok _        -> Error errors
+                | Error errors, Error error -> Error(error::errors)
+            ) (Ok([]))
+
+        match userResult with
+        | Error error -> Error [error]
+        | Ok user ->
+        match evaluations with
+        | Error error -> Error error
+        | Ok evaluations ->
+            let userSkills : UserSkills = {
                 user = user
-                // TODO : to update to use Evaluation.fromDto
-                evaluations = userSkills.evaluations |> Array.map fromEvaluationsDto  |> List.ofArray
-            })        
+                evaluations = evaluations
+            }
+            userSkills |> Ok
 
 
     let serializeSkills usersSkills =

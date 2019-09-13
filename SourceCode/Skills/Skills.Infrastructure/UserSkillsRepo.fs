@@ -7,6 +7,7 @@ open Microsoft.WindowsAzure.Storage
 open Skills.Infrastructure.Dto
 open System.Threading.Tasks
 open Skills.Domain.UserSkillEvaluation
+open Skills.Domain
 
 module UserSkillsRepo =
 

@@ -5,6 +5,7 @@ open UserSkillEvaluation
 open Skills.Domain.UserSkillEvaluation
 open System.Threading.Tasks
 open Skills.Infrastructure.Dto
+open Skills.Domain
 
 module UserSkillsInterop =
 

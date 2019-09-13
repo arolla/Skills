@@ -7,6 +7,7 @@ open Skills.Infrastructure
 open Skills.Infrastructure.EventStore
 open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
+open Helpers
 
 [<TestClass>]
 type TestEventStore () =
@@ -36,7 +37,7 @@ type TestEventStore () =
             user = {name = Helpers.userName "Machin"}
             evaluation = {
                 skill = Skill "poterie"
-                level = Level 4
+                level = level 4
                 date = EvaluationDate(DateTime(2019, 08, 30))
             }
         }

@@ -1,6 +1,6 @@
 ﻿namespace Skills.Domain
 
-type Level = Level of int
+type Level = private Level of int
 
 module Level = 
     let MIN_LEVEL = 0

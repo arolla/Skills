@@ -6,6 +6,7 @@ open Skills.Domain
 open Skills.Infrastructure.Dto
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure.UserSkillDto
+open Helpers
 
 [<TestClass>]
 type TestUserSkillDto () =
@@ -126,7 +127,7 @@ type TestUserSkillDto () =
             evaluation = {
                 skill = Skill "fsharp"
                 date = EvaluationDate( DateTime(2019, 09, 09))
-                level = Level 3
+                level = level 3
             }
         }
 

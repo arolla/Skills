@@ -12,6 +12,11 @@ type TestUserSkillEvaluation () =
         match UserName.create name with
         | Error _ -> "Unable to create a username" |> failwith
         | Ok username -> username
+
+    let level level =
+        match Level.create level with
+        | Error _ -> "Unable to create a level" |> failwith
+        | Ok level -> level
         
 
     [<TestMethod>]
@@ -20,7 +25,7 @@ type TestUserSkillEvaluation () =
         let evaluation = {
             skill = Skill "fsharp"
             date = EvaluationDate(DateTime(2019, 11, 02))
-            level = Level 3
+            level = level 3
         }
         let user = {
             name = userName "Jack"
@@ -65,7 +70,7 @@ type TestUserSkillEvaluation () =
                     {
                         skill = Skill "fsharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
+                        level = level 3
                     }
                 ]
             }
@@ -92,7 +97,7 @@ type TestUserSkillEvaluation () =
                     {
                         skill = Skill "fsharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
+                        level = level 3
                     }
                 ]
             }
@@ -115,7 +120,7 @@ type TestUserSkillEvaluation () =
                 {
                     skill = Skill "fsharp"
                     date = EvaluationDate(DateTime(2019, 08,23))
-                    level = Level 3
+                    level = level 3
                 }
             ]
         }
@@ -131,7 +136,7 @@ type TestUserSkillEvaluation () =
                     {
                         skill = Skill "fsharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
-                        level = Level 3
+                        level = level 3
                     }
                 ]
             }
@@ -151,7 +156,7 @@ type TestUserSkillEvaluation () =
         let evaluation:Evaluation = {
             skill = Skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
-            level = Level 3
+            level = level 3
         }
         let expectedUserSkills : UserSkills = {
                 user = {
@@ -182,7 +187,7 @@ type TestUserSkillEvaluation () =
         let evaluation:Evaluation = {
             skill = Skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
-            level = Level 3
+            level = level 3
         }
         let readSkills jack = async{
                 return
@@ -215,7 +220,7 @@ type TestUserSkillEvaluation () =
         let evaluation:Evaluation = {
             skill = Skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
-            level = Level 3
+            level = level 3
         }
         let expectedExceptionMessage = "My amazing expected exception message"
         let readSkills jack = async {
@@ -244,7 +249,7 @@ type TestUserSkillEvaluation () =
            let evaluation:Evaluation = {
                skill = Skill "csharp"
                date = EvaluationDate(DateTime(2019, 08,23))
-               level = Level 3
+               level = level 3
            }
            let readSkills jack = async{
                    return Ok {
