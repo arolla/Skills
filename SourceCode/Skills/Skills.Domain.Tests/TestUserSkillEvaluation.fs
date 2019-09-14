@@ -28,7 +28,7 @@ type TestUserSkillEvaluation () =
             
         let evaluation = {
             skill = skill "fsharp"
-            date = EvaluationDate(DateTime(2019, 11, 02))
+            date = DateTime(2019, 11, 02) |> EvaluationDate.create 
             level = level 3
         }
         let user = {
@@ -73,7 +73,7 @@ type TestUserSkillEvaluation () =
                 evaluations = [
                     {
                         skill = skill "fsharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
+                        date = DateTime(2019, 08, 23) |> EvaluationDate.create
                         level = level 3
                     }
                 ]
@@ -100,7 +100,7 @@ type TestUserSkillEvaluation () =
                 evaluations = [
                     {
                         skill = skill "fsharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
+                        date = DateTime(2019, 08,23) |> EvaluationDate.create
                         level = level 3
                     }
                 ]
@@ -123,7 +123,7 @@ type TestUserSkillEvaluation () =
             evaluations = [
                 {
                     skill = skill "fsharp"
-                    date = EvaluationDate(DateTime(2019, 08,23))
+                    date = DateTime(2019, 08,23) |> EvaluationDate.create
                     level = level 3
                 }
             ]
@@ -139,7 +139,7 @@ type TestUserSkillEvaluation () =
                 evaluations = [
                     {
                         skill = skill "fsharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
+                        date = DateTime(2019, 08,23) |> EvaluationDate.create
                         level = level 3
                     }
                 ]
@@ -159,7 +159,7 @@ type TestUserSkillEvaluation () =
         }
         let evaluation:Evaluation = {
             skill = skill "csharp"
-            date = EvaluationDate(DateTime(2019, 08,23))
+            date = DateTime(2019, 08,23) |> EvaluationDate.create
             level = level 3
         }
         let expectedUserSkills : UserSkills = {
@@ -190,7 +190,7 @@ type TestUserSkillEvaluation () =
         }
         let evaluation:Evaluation = {
             skill = skill "csharp"
-            date = EvaluationDate(DateTime(2019, 08,23))
+            date = DateTime(2019, 08,23) |> EvaluationDate.create
             level = level 3
         }
         let readSkills jack = async{
@@ -223,7 +223,7 @@ type TestUserSkillEvaluation () =
         }
         let evaluation:Evaluation = {
             skill = skill "csharp"
-            date = EvaluationDate(DateTime(2019, 08,23))
+            date = DateTime(2019, 08,23) |> EvaluationDate.create
             level = level 3
         }
         let expectedExceptionMessage = "My amazing expected exception message"
@@ -252,7 +252,7 @@ type TestUserSkillEvaluation () =
            }
            let evaluation:Evaluation = {
                skill = skill "csharp"
-               date = EvaluationDate(DateTime(2019, 08,23))
+               date = DateTime(2019, 08,23) |> EvaluationDate.create
                level = level 3
            }
            let readSkills jack = async{

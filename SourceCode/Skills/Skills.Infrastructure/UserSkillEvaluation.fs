@@ -14,10 +14,10 @@ module UserSkillEvaluation =
     let convertSkills (userSkills: UserSkills) : UserSkillsDto =
         let toUserDto (user: User) =
             {name = UserName.value user.name}
-        let toEvaluationsDto ({skill = skill; date = EvaluationDate date; level = level}: Evaluation) =
+        let toEvaluationsDto ({skill = skill; date =  date; level = level}: Evaluation) =
             {
                 skill = Skill.value skill
-                date = date
+                date = EvaluationDate.value date
                 level = Level.value level
             }
         

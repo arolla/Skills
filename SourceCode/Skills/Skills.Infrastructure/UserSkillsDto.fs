@@ -2,7 +2,6 @@ namespace Skills.Infrastructure
 
 open Skills.Domain.UserSkillEvaluation
 open Dto
-open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
 
 module UserSkillsDto =

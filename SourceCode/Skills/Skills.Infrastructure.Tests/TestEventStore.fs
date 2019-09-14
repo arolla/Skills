@@ -38,7 +38,7 @@ type TestEventStore () =
             evaluation = {
                 skill = skill "poterie"
                 level = level 4
-                date = EvaluationDate(DateTime(2019, 08, 30))
+                date = DateTime(2019, 08, 30) |> EvaluationDate.create
             }
         }
 

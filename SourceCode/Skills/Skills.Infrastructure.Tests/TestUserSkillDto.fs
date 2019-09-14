@@ -126,7 +126,7 @@ type TestUserSkillDto () =
             user = {name = Helpers.userName userName }
             evaluation = {
                 skill = skill "fsharp"
-                date = EvaluationDate( DateTime(2019, 09, 09))
+                date = DateTime(2019, 09, 09) |> EvaluationDate.create
                 level = level 3
             }
         }

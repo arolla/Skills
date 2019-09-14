@@ -3,9 +3,12 @@
 open System
 
 
-type EvaluationDate = EvaluationDate  of DateTime
+type EvaluationDate = private EvaluationDate of DateTime
 
 module EvaluationDate =
+
+    let create date =
+        EvaluationDate date
 
     let value evaluationDate =
         let (EvaluationDate value) = evaluationDate

@@ -3,8 +3,6 @@
 open System
 open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
-open System.Threading.Tasks
-open EventStore
 open Newtonsoft.Json
 
 module EventRepo =

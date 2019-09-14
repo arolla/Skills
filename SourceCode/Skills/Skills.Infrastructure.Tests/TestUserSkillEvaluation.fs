@@ -21,7 +21,7 @@ type TestUserSkillEvaluation () =
                 evaluations = [
                     {
                         skill = skill "csharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
+                        date = DateTime(2019, 08,23) |> EvaluationDate.create
                         level = level 3
                     }
                 ]
@@ -72,7 +72,7 @@ type TestUserSkillEvaluation () =
                 evaluations = [
                     {
                         skill = skill "csharp"
-                        date = EvaluationDate(DateTime(2019, 08,23))
+                        date = DateTime(2019, 08,23) |> EvaluationDate.create
                         level = level 3
                     }
                 ]
@@ -128,7 +128,7 @@ type TestUserSkillEvaluation () =
            let jackName = "Jack"
            let evaluation:Evaluation = {
                skill = skill "csharp"
-               date = EvaluationDate(DateTime(2019, 08, 30))
+               date = DateTime(2019, 08, 30) |> EvaluationDate.create
                level = level 3
            }
            let expectedUserSkills : UserSkills = {
