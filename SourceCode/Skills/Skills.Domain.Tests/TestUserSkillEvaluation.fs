@@ -17,13 +17,17 @@ type TestUserSkillEvaluation () =
         match Level.create level with
         | Error _ -> "Unable to create a level" |> failwith
         | Ok level -> level
-        
+  
+    let skill skill =
+        match Skill.create skill with
+        | Error _ -> "Unable to create a skill" |> failwith
+        | Ok skill -> skill  
 
     [<TestMethod>]
     member this.``Given an evaluation and a user When Add evaluation to the user given Then return user skills with the evaluation added `` () =
             
         let evaluation = {
-            skill = Skill "fsharp"
+            skill = skill "fsharp"
             date = EvaluationDate(DateTime(2019, 11, 02))
             level = level 3
         }
@@ -68,7 +72,7 @@ type TestUserSkillEvaluation () =
                 user = jack
                 evaluations = [
                     {
-                        skill = Skill "fsharp"
+                        skill = skill "fsharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
                         level = level 3
                     }
@@ -95,7 +99,7 @@ type TestUserSkillEvaluation () =
                 user = tom
                 evaluations = [
                     {
-                        skill = Skill "fsharp"
+                        skill = skill "fsharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
                         level = level 3
                     }
@@ -118,7 +122,7 @@ type TestUserSkillEvaluation () =
             user = jack
             evaluations = [
                 {
-                    skill = Skill "fsharp"
+                    skill = skill "fsharp"
                     date = EvaluationDate(DateTime(2019, 08,23))
                     level = level 3
                 }
@@ -134,7 +138,7 @@ type TestUserSkillEvaluation () =
                 user = tom
                 evaluations = [
                     {
-                        skill = Skill "fsharp"
+                        skill = skill "fsharp"
                         date = EvaluationDate(DateTime(2019, 08,23))
                         level = level 3
                     }
@@ -154,7 +158,7 @@ type TestUserSkillEvaluation () =
             name = userName jackName
         }
         let evaluation:Evaluation = {
-            skill = Skill "csharp"
+            skill = skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
             level = level 3
         }
@@ -185,7 +189,7 @@ type TestUserSkillEvaluation () =
             name = userName "Jack"
         }
         let evaluation:Evaluation = {
-            skill = Skill "csharp"
+            skill = skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
             level = level 3
         }
@@ -218,7 +222,7 @@ type TestUserSkillEvaluation () =
             name = userName "Jack"
         }
         let evaluation:Evaluation = {
-            skill = Skill "csharp"
+            skill = skill "csharp"
             date = EvaluationDate(DateTime(2019, 08,23))
             level = level 3
         }
@@ -247,7 +251,7 @@ type TestUserSkillEvaluation () =
                name = userName "Jack"
            }
            let evaluation:Evaluation = {
-               skill = Skill "csharp"
+               skill = skill "csharp"
                date = EvaluationDate(DateTime(2019, 08,23))
                level = level 3
            }

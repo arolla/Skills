@@ -125,7 +125,7 @@ type TestUserSkillDto () =
         let expectedUserSkill : UserSkill = {
             user = {name = Helpers.userName userName }
             evaluation = {
-                skill = Skill "fsharp"
+                skill = skill "fsharp"
                 date = EvaluationDate( DateTime(2019, 09, 09))
                 level = level 3
             }

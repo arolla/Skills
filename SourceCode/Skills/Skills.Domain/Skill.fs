@@ -2,7 +2,7 @@
 
 open System
 
-type Skill = Skill of string 
+type Skill = private Skill of string 
 
 module Skill = 
 

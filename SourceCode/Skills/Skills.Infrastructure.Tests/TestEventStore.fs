@@ -36,7 +36,7 @@ type TestEventStore () =
             date = EventDate(now)
             user = {name = Helpers.userName "Machin"}
             evaluation = {
-                skill = Skill "poterie"
+                skill = skill "poterie"
                 level = level 4
                 date = EvaluationDate(DateTime(2019, 08, 30))
             }

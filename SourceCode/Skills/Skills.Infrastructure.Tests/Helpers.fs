@@ -1,6 +1,5 @@
 ﻿namespace Skills.Infrastructure.Tests
 
-open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
 
 module Helpers =
@@ -14,3 +13,7 @@ module Helpers =
         | Error _ -> "Unable to create a level" |> failwith
         | Ok level -> level
 
+    let skill skill =
+        match Skill.create skill with
+        | Error _ -> "Unable to create a skill" |> failwith
+        | Ok skill -> skill
