@@ -1,13 +1,12 @@
 ﻿namespace Skills.Infrastructure
 
-open System
+open Skills.Domain
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
 open Skills.Infrastructure.Dto
 open System.Threading.Tasks
-open Skills.Domain.UserSkillEvaluation
-open Skills.Domain
+open Skills.Domain.Types
 
 module UserSkillsRepo =
 
@@ -25,7 +24,7 @@ module UserSkillsRepo =
         let table = tableClient.GetTableReference(userSkillsTable)
         table
 
-    let saveUsersSkills connectionString userSkills =
+    let saveUsersSkills connectionString (userSkills:UserSkills) =
         let table = connectionString |> getUserSkillsTable 
         let userName = UserName.value userSkills.user.name
         let jsonUserSkills = 

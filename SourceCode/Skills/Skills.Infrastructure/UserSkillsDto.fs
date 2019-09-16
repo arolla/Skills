@@ -1,6 +1,6 @@
 namespace Skills.Infrastructure
 
-open Skills.Domain.UserSkillEvaluation
+open Skills.Domain.Types
 open Dto
 open Skills.Domain
 

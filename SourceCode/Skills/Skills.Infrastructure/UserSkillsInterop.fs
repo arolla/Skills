@@ -2,7 +2,7 @@
 
 open UserSkillsRepo
 open UserSkillEvaluation
-open Skills.Domain.UserSkillEvaluation
+open Skills.Domain.Types
 open System.Threading.Tasks
 open Skills.Infrastructure.Dto
 open Skills.Domain

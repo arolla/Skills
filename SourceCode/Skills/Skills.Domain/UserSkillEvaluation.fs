@@ -1,29 +1,9 @@
 namespace Skills.Domain
 
+open Types
+
 module UserSkillEvaluation =
-    
-    type User = {
-        name : UserName
-    }
-    
-    type UserSkill = {
-        user : User
-        evaluation : Evaluation
-    }
-
-    type UserSkills = {
-        user : User
-        evaluations : Evaluation list
-    }
-
- 
-
-    module User =
-        let create name =
-            UserName.create name
-            |> Result.map (fun userName -> {name = userName})
-            
-    
+                   
     let addEvaluationToUserSkills evaluation userSkills = 
         {
             userSkills with evaluations = evaluation :: userSkills.evaluations 

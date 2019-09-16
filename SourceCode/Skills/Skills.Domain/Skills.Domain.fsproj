@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Level.fs" />
-    <Compile Include="Skill.fs" />
-    <Compile Include="EvaluationDate.fs" />
-    <Compile Include="Evaluation.fs" />
-    <Compile Include="UserName.fs" />
+    <Compile Include="Types\Level.fs" />
+    <Compile Include="Types\Skill.fs" />
+    <Compile Include="Types\EvaluationDate.fs" />
+    <Compile Include="Types\Evaluation.fs" />
+    <Compile Include="Types\UserName.fs" />
+    <Compile Include="Types\Types.fs" />
+    <Compile Include="Types\User.fs" />
     <Compile Include="UserSkillEvaluation.fs" />
     <Compile Include="Event.fs" />
   </ItemGroup>

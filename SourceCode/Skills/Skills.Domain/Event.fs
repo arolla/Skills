@@ -1,8 +1,7 @@
 ﻿namespace Skills.Domain
 
 open System
-open UserSkillEvaluation
-open Evaluation
+open Types
 
 module Event =
     type EventDate = EventDate of DateTime

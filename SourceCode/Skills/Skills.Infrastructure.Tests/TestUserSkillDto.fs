@@ -7,13 +7,14 @@ open Skills.Infrastructure.Dto
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure.UserSkillDto
 open Helpers
+open Skills.Domain.Types
 
 [<TestClass>]
 type TestUserSkillDto () =
     [<TestMethod>]
     member this.``Given a user skill dto with empty name when I convert it to domain type then I get an error``() =
         let userName = ""
-        let userSkillDto = {
+        let userSkillDto:UserSkillDto= {
             user = { name = userName }
             evaluation = {
                 skill = "fsharp"
@@ -33,7 +34,7 @@ type TestUserSkillDto () =
     [<TestMethod>]
     member this.``Given a user skill dto with empty skill when I convert it to domain type then I get an error``() =
         let userName = "Jack"
-        let userSkillDto = {
+        let userSkillDto:UserSkillDto= {
             user = { name = userName }
             evaluation = {
                 skill = ""
@@ -53,7 +54,7 @@ type TestUserSkillDto () =
     [<TestMethod>]
     member this.``Given a user skill dto with level with negative value when I convert it to domain type then I get an error``() =
         let userName = "Jack"
-        let userSkillDto = {
+        let userSkillDto:UserSkillDto= {
             user = { name = userName }
             evaluation = {
                 skill = "java"
@@ -73,7 +74,7 @@ type TestUserSkillDto () =
     [<TestMethod>]
     member this.``Given a user skill dto with level greater than five when I convert it to domain type then I get an error``() =
         let userName = "Jack"
-        let userSkillDto = {
+        let userSkillDto:UserSkillDto= {
             user = { name = userName }
             evaluation = {
                 skill = "java"
@@ -93,7 +94,7 @@ type TestUserSkillDto () =
     [<TestMethod>]
     member this.``Given a user skill dto with valid skill level and date When I convert it to domain type then I get an evaluation``() =
         let userName = "Jack"
-        let userSkillDto = {
+        let userSkillDto:UserSkillDto= {
             user = { name = userName }
             evaluation = {
                 skill = "java"
@@ -113,7 +114,7 @@ type TestUserSkillDto () =
     [<TestMethod>]
     member this.``Given a user skill dto when I convert it to domain type then I get the UserSkill domain type``() =
         let userName = "Jack"
-        let userSkillDto = {
+        let userSkillDto:UserSkillDto= {
             user = { name = userName }
             evaluation = {
                 skill = "fsharp"

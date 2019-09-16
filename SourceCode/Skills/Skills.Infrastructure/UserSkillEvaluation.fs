@@ -1,5 +1,6 @@
 namespace Skills.Infrastructure
 
+open Skills.Domain.Types
 open Skills.Domain.UserSkillEvaluation
 open Newtonsoft.Json
 open Skills.Domain

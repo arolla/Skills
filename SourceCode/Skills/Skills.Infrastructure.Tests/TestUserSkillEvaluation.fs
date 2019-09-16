@@ -1,13 +1,13 @@
 namespace Skills.Infrastructure.Tests
 
 open System
-open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
 open Skills.Infrastructure.UserSkillEvaluation
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure
 open Skills.Infrastructure.Dto
 open Helpers
+open Skills.Domain.Types
 
 [<TestClass>]
 type TestUserSkillEvaluation () =
@@ -83,13 +83,13 @@ type TestUserSkillEvaluation () =
 
     [<TestMethod>]
     member this.``Given many users skills When I would save them Then they are serialized in a json content``() =
-        let jack = {
+        let jack:UserDto = {
             name = "Jack"
         }
-        let tom = {
+        let tom:UserDto = {
             name = "Tom"
         }
-        let usersSkills = [
+        let usersSkills:UserSkillsDto list = [
             {
                 user = tom
                 evaluations = [|

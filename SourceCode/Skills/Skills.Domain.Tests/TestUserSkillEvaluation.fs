@@ -2,6 +2,7 @@ namespace Skills.Domain.Tests
 
 open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
+open Skills.Domain.Types
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 
