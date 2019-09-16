@@ -7,7 +7,7 @@ open Skills.Domain
 module UserSkillsDto =
 
     let toDomain (dto:UserSkillsDto) = 
-        let toDomain user evaluations : UserSkills =
+        let toDomain user evaluations : UserEvaluations =
             {
                 user = user
                 evaluations = evaluations
@@ -34,7 +34,7 @@ module UserSkillsDto =
         toDomain user evaluations |> Ok
 
 
-    let fromDomain (userSkills:UserSkills) : UserSkillsDto =
+    let fromDomain (userSkills:UserEvaluations) : UserSkillsDto =
         let evaluations = userSkills.evaluations |> List.map EvaluationDto.fromDomain |> Array.ofList
         {
             user = {name = UserName.value userSkills.user.name}

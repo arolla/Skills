@@ -6,7 +6,7 @@ open Skills.Domain.Types
 
 module UserSkillDto =
 
-    let toDomain (dto:UserSkillDto) : Result<UserSkill, string> =
+    let toDomain (dto:UserSkillDto) : Result<UserEvaluation, string> =
         let userResult = User.create dto.user.name
         match userResult with 
         | Error message -> Error message
@@ -19,5 +19,5 @@ module UserSkillDto =
         match evaluationResult with
         | Error message -> Error message
         | Ok evaluation ->
-        let userSkill:UserSkill = {user = user; evaluation = evaluation}
+        let userSkill:UserEvaluation = {user = user; evaluation = evaluation}
         userSkill |> Ok

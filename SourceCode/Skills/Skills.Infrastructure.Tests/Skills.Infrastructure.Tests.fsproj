@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Include="Helpers.fs" />
+    <Compile Include="TestUserEvaluationDto.fs" />
     <Compile Include="TestUserSkillDto.fs" />
     <Compile Include="TestEvaluationInterop.fs" />
     <Compile Include="TestEventSender.fs" />

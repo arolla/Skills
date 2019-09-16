@@ -2,7 +2,6 @@
 
 open System
 open Skills.Domain
-open Skills.Domain.Event
 open Newtonsoft.Json
 open Skills.Infrastructure.Dto
 
@@ -30,8 +29,13 @@ module EventStore =
             eventType = typeof<EvaluationAdded>.Name
         }
 
-    let addEvent saveEvent enqueue evaluationAddedDto =
+    let addEvent saveEvent enqueue userEvaluation =
         async {
+            let evaluationAddedDto =
+                userEvaluation
+                |> DatedUserEvaluationDto.toDomainEvent 
+                |> convertToDto
+
             let! r = saveEvent evaluationAddedDto
             match r with
             | Error _ as error -> return error

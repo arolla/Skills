@@ -7,10 +7,12 @@ using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
+using Skills.Infrastructure;
+
 using System.IO;
 using System.Threading.Tasks;
+
 using static Skills.Infrastructure.EvaluationInterop;
-using static Skills.Infrastructure.EventStore;
 
 namespace SkillsFunc
 {
@@ -29,7 +31,7 @@ namespace SkillsFunc
             var connectionString = config["SkillsStorageConnectionString"];
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
-            var evaluationAddedEvent = JsonConvert.DeserializeObject<UserEvalutationDto>(requestBody);
+            var evaluationAddedEvent = JsonConvert.DeserializeObject<DatedUserEvaluationDto>(requestBody);
 
             await AddEvaluationAddedEventAsync(connectionString, evaluationAddedEvent);
 

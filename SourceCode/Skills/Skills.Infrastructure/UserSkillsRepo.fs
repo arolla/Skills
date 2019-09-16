@@ -24,7 +24,7 @@ module UserSkillsRepo =
         let table = tableClient.GetTableReference(userSkillsTable)
         table
 
-    let saveUsersSkills connectionString (userSkills:UserSkills) =
+    let saveUsersSkills connectionString (userSkills:UserEvaluations) =
         let table = connectionString |> getUserSkillsTable 
         let userName = UserName.value userSkills.user.name
         let jsonUserSkills = 

@@ -7,12 +7,12 @@ module Types =
         name : UserName
     }
 
-    type UserSkill = {
+    type UserEvaluation = {
         user : User
         evaluation : Evaluation
     }
 
-    type UserSkills = {
+    type UserEvaluations = {
         user : User
         evaluations : Evaluation list
     }

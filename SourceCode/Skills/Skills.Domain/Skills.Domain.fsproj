@@ -14,7 +14,7 @@
     <Compile Include="Types\User.fs" />
     <Compile Include="UserSkillEvaluation.fs" />
     <Compile Include="EventDate.fs" />
-    <Compile Include="Event.fs" />
+    <Compile Include="EvaluationAdded.fs" />
   </ItemGroup>
 
 </Project>

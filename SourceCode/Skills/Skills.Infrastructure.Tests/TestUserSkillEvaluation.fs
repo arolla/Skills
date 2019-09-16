@@ -13,7 +13,7 @@ open Skills.Domain.Types
 type TestUserSkillEvaluation () =
     [<TestMethod>]
     member this.``Given many users skills When I would convert them DTO Then they are serializable``() =
-        let usersSkills : UserSkills = 
+        let usersSkills : UserEvaluations = 
             {
                 user = {
                     name = Helpers.userName "Tom"
@@ -64,8 +64,8 @@ type TestUserSkillEvaluation () =
 
         let convertedSkills = convertDtoSkills userSkillsDto
 
-        let expectedUserSkills : Result<UserSkills, string list> = 
-            let userSkills:UserSkills = {
+        let expectedUserSkills : Result<UserEvaluations, string list> = 
+            let userSkills:UserEvaluations = {
                 user = {
                     name = Helpers.userName "Tom"
                 }
@@ -131,7 +131,7 @@ type TestUserSkillEvaluation () =
                date = DateTime(2019, 08, 30) |> EvaluationDate.create
                level = level 3
            }
-           let expectedUserSkills : UserSkills = {
+           let expectedUserSkills : UserEvaluations = {
                user = {
                    name = Helpers.userName jackName
                }
@@ -144,7 +144,7 @@ type TestUserSkillEvaluation () =
                return Ok ()
            }
            let readUserSkills user = async{
-               let userSkills : UserSkills = {
+               let userSkills : UserEvaluations = {
                    user = user
                    evaluations = List.empty
                }

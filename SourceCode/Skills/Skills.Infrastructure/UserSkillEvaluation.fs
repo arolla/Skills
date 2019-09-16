@@ -12,7 +12,7 @@ module UserSkillEvaluation =
         let fromDto (dto:UserDto) =
             User.create dto.name
     
-    let convertSkills (userSkills: UserSkills) : UserSkillsDto =
+    let convertSkills (userSkills: UserEvaluations) : UserSkillsDto =
         let toUserDto (user: User) =
             {name = UserName.value user.name}
         let toEvaluationsDto ({skill = skill; date =  date; level = level}: Evaluation) =
@@ -27,7 +27,7 @@ module UserSkillEvaluation =
             evaluations = userSkills.evaluations |> Array.ofList |> Array.map toEvaluationsDto 
         }
 
-    let convertDtoSkills (userSkills: UserSkillsDto) : Result<UserSkills, string list> =
+    let convertDtoSkills (userSkills: UserSkillsDto) : Result<UserEvaluations, string list> =
             
         let userResult = UserDto.toDomain userSkills.user
         let evaluations = 
@@ -47,7 +47,7 @@ module UserSkillEvaluation =
         match evaluations with
         | Error error -> Error error
         | Ok evaluations ->
-            let userSkills : UserSkills = {
+            let userSkills : UserEvaluations = {
                 user = user
                 evaluations = evaluations
             }

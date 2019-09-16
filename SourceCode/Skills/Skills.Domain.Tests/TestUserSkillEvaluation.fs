@@ -163,7 +163,7 @@ type TestUserSkillEvaluation () =
             date = DateTime(2019, 08,23) |> EvaluationDate.create
             level = level 3
         }
-        let expectedUserSkills : UserSkills = {
+        let expectedUserSkills : UserEvaluations = {
                 user = {
                     name = userName jackName
                 }

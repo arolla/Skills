@@ -21,5 +21,3 @@ type TestEvaluationInterop () =
         Assert.AreEqual(DateTime(2019,08,30), userSkill.evaluation.date)
         Assert.AreEqual(4, userSkill.evaluation.level)
         Assert.AreEqual("poterie", userSkill.evaluation.skill)
-
-    

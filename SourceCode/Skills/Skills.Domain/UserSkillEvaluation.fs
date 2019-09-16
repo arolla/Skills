@@ -9,7 +9,7 @@ module UserSkillEvaluation =
             userSkills with evaluations = evaluation :: userSkills.evaluations 
         }
 
-    let findSkills user (usersSkills:UserSkills list) =
+    let findSkills user (usersSkills:UserEvaluations list) =
         let foundSkills = List.tryFind (fun userSkill -> userSkill.user = user) usersSkills
         match foundSkills with 
         | None -> { user = user; evaluations = []}
