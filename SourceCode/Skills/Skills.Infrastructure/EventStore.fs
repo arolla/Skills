@@ -3,7 +3,6 @@
 open System
 open Skills.Domain
 open Skills.Domain.Event
-open UserSkillEvaluation
 open Newtonsoft.Json
 open Skills.Infrastructure.Dto
 
@@ -24,10 +23,9 @@ module EventStore =
         }
 
         let serializedUserSkill = JsonConvert.SerializeObject(userSkill)
-        let (EventDate date) = domainEvent.date
 
         {
-            date = date
+            date = EventDate.value domainEvent.date
             data = serializedUserSkill
             eventType = typeof<EvaluationAdded>.Name
         }

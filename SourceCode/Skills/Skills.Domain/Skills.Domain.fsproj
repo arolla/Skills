@@ -13,6 +13,7 @@
     <Compile Include="Types\Types.fs" />
     <Compile Include="Types\User.fs" />
     <Compile Include="UserSkillEvaluation.fs" />
+    <Compile Include="EventDate.fs" />
     <Compile Include="Event.fs" />
   </ItemGroup>
 

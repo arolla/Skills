@@ -5,8 +5,8 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Domain.Event
 open Skills.Infrastructure
 open Skills.Infrastructure.EventStore
-open Skills.Domain.UserSkillEvaluation
 open Skills.Domain
+open Skills.Domain.EventDate
 open Helpers
 
 [<TestClass>]
@@ -33,7 +33,7 @@ type TestEventStore () =
     member this.``Given an evaluation added domain event When I convert it to Dto event Then the dto should contains the serialized domain event``() =
         let now = DateTime.Now
         let evaluationAddedEvent:EvaluationAdded = {
-            date = EventDate(now)
+            date = EventDate.create now
             user = {name = Helpers.userName "Machin"}
             evaluation = {
                 skill = skill "poterie"
