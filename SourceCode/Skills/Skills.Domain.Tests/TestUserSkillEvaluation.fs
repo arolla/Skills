@@ -48,109 +48,6 @@ type TestUserSkillEvaluation () =
             modifiedUserSkills.evaluations
             |> List.contains evaluation
         Assert.IsTrue(exists)
-
-    [<TestMethod>]
-    member this.``Given no user skills When I would find the user skills Then I get no evaluation for this user``() =
-        let jack = {
-            name = userName "Jack"
-        }
-
-        let usersSkills = []
-
-        let jackSkills = findSkills jack usersSkills
-
-        Assert.AreEqual(jack.name, jackSkills.user.name)
-        Assert.AreEqual(0, jackSkills.evaluations.Length)
-                
-    [<TestMethod>]
-    member this.``Given skills of my user When I would find my user skills Then I get the existing user skills``() =
-        let jack = {
-            name = userName "Jack"
-        }
-
-        let usersSkills = [
-            {
-                user = jack
-                evaluations = [
-                    {
-                        skill = skill "fsharp"
-                        date = DateTime(2019, 08, 23) |> EvaluationDate.create
-                        level = level 3
-                    }
-                ]
-            }
-        ]
-
-        let jackSkills = findSkills jack usersSkills
-
-        Assert.AreEqual(usersSkills.Head, jackSkills)
-        
-    [<TestMethod>]
-    member this.``Given skills of other user When I would find my user skills Then I get no skills``() =
-        let jack = {
-            name = userName "Jack"
-        }
-
-        let tom = {
-            name = userName "Tom"
-        }
-
-        let usersSkills = [
-            {
-                user = tom
-                evaluations = [
-                    {
-                        skill = skill "fsharp"
-                        date = DateTime(2019, 08,23) |> EvaluationDate.create
-                        level = level 3
-                    }
-                ]
-            }
-        ]
-
-        let jackSkills = findSkills jack usersSkills
-
-        Assert.AreEqual(jack.name, jackSkills.user.name)
-        Assert.AreEqual(0, jackSkills.evaluations.Length)
-
-    [<TestMethod>]
-    member this.``Given many users skills (including mine) When I would find my user skills Then I get the existing user skills``() =
-        let jack = {
-            name = userName "Jack"
-        }
-        
-        let jackSkills = {
-            user = jack
-            evaluations = [
-                {
-                    skill = skill "fsharp"
-                    date = DateTime(2019, 08,23) |> EvaluationDate.create
-                    level = level 3
-                }
-            ]
-        }
-
-        let tom = {
-            name = userName "Tom"
-        }
-
-        let usersSkills = [
-            {
-                user = tom
-                evaluations = [
-                    {
-                        skill = skill "fsharp"
-                        date = DateTime(2019, 08,23) |> EvaluationDate.create
-                        level = level 3
-                    }
-                ]
-            }
-            jackSkills
-        ]
-
-        let foundJackSkills = findSkills jack usersSkills
-
-        Assert.AreEqual(jackSkills, foundJackSkills)
     
     [<TestMethod>]
     member this.``Given a user and an evaluation When I would add the evaluation to the user skills Then they are persisted``() =
@@ -182,7 +79,7 @@ type TestUserSkillEvaluation () =
                 return Ok ()
             }
        
-        addEvaluation readSkills saveSkills jack evaluation |> ignore
+        addEvaluation readSkills saveSkills jack evaluation |> Async.RunSynchronously
 
     [<TestMethod>]
     member this.``Given an error skills read When I would add the evaluation to the user skills Then Error should be returned``() =
@@ -259,29 +156,60 @@ type TestUserSkillEvaluation () =
            let readSkills jack = async{
                    return Ok {
                        user = jack
-                       evaluations = List.empty
+                       evaluations = evaluation |> List.singleton
                    }
                 }
-           let saveSkills userSkill = async{
+           let saveSkills _= async{
                    return
-                       sprintf "Problem when saving user skills of %A" userSkill
-                       |> exn
+                       exn "Save skill should not be called"
                        |> Error
                }
-           let expectedUserSkillsToSave = {
-               user = jack
-               evaluations = [evaluation]
-           }
 
            async{
                let! result = addEvaluation readSkills saveSkills jack evaluation
-               match result with 
-               | Error message -> 
-                   let expectedMessage = 
-                       sprintf 
-                           "Problem when saving user skills of %A"
-                           expectedUserSkillsToSave
-                   Assert.AreEqual(expectedMessage, message)
-               | Ok _ -> Assert.Fail "Should not add an evaluation to the user"
+               match result with
+               | Error (EvaluationAlreadyExists _) -> Assert.IsTrue(true, "Evaluation already exists is the awaited result")
+               | _ -> Assert.Fail "Should not add an evaluation to the user"
 
-           }
+           } |> Async.RunSynchronously
+
+
+    [<TestMethod>]
+    member this.``Given an existing evaluation When I would add the evaluation to the user skills Then I get an Already Existing Error``() =
+        let jack:User = {
+            name = userName "Jack"
+        }
+        let evaluation:Evaluation = {
+            skill = skill "csharp"
+            date = DateTime(2019, 08,23) |> EvaluationDate.create
+            level = level 3
+        }
+        let readSkills jack = async{
+                return Ok {
+                    user = jack
+                    evaluations = List.empty
+                }
+             }
+        let saveSkills userSkill = async{
+                return
+                    sprintf "Problem when saving user skills of %A" userSkill
+                    |> exn
+                    |> Error
+            }
+        let expectedUserSkillsToSave = {
+            user = jack
+            evaluations = [evaluation]
+        }
+
+        async{
+            let! result = addEvaluation readSkills saveSkills jack evaluation
+            match result with 
+            | Error (SaveException ex) -> 
+                let expectedMessage = 
+                    sprintf 
+                        "Problem when saving user skills of %A"
+                        expectedUserSkillsToSave
+                Assert.AreEqual(expectedMessage, ex.Message)
+            | Error _ -> Assert.Fail "It's not the awaited error"
+            | Ok _ -> Assert.Fail "Should not add an evaluation to the user"
+        } |> Async.RunSynchronously

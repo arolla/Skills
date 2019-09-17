@@ -17,4 +17,4 @@ module Evaluation =
         match levelResult with
         | Error message -> Error message
         | Ok level ->
-        {skill = skill; level = level; date = EvaluationDate date} |> Ok
+        {skill = skill; level = level; date = EvaluationDate.create date} |> Ok

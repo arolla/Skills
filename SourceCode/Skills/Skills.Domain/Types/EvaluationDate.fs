@@ -7,8 +7,8 @@ type EvaluationDate = private EvaluationDate of DateTime
 
 module EvaluationDate =
 
-    let create date =
-        EvaluationDate date
+    let create (date:DateTime) =
+        EvaluationDate date.Date
 
     let value evaluationDate =
         let (EvaluationDate value) = evaluationDate

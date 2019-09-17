@@ -21,6 +21,8 @@ module EvaluationInterop =
         async{
             match! addEvaluation readSkills saveSkills event with
             | Ok _      -> ()
+            | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.EvaluationAlreadyExists evaluation) -> 
+                sprintf "This evaluation already exists: %A" evaluation |> exn |> raise
             | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.SaveException exn) -> raise exn
             | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.ReadUserSkillsErrors errors) -> 
                 errors |> String.concat ", " |> exn |> raise

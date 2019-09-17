@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 using System.Threading.Tasks;
+
 using static Skills.Infrastructure.Dto;
 using static Skills.Infrastructure.UserSkillsInterop;
 
@@ -15,7 +16,7 @@ namespace SkillsFunc
 {
     public static class GetUserSkillFunction
     {
-        [FunctionName("GetUserSkillFunction")]
+        [FunctionName(nameof(GetUserSkillFunction))]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");

@@ -137,4 +137,3 @@ type TestUserSkillDto () =
         | _ -> 
             let errorMessage = sprintf "Conversion to domain failed, expected %A" expectedUserSkill
             Assert.Fail(errorMessage)
-        ()

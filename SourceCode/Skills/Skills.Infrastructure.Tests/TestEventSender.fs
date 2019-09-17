@@ -16,7 +16,7 @@ type TestEventSender () =
             eventType = "EvaluationAdded"
         }
 
-        let connectionString = ""
+        let connectionString = "UseDevelopmentStorage=true"
         let result = sendEvent connectionString eventToEnqueue |> Async.RunSynchronously
         match result with
         | Error error -> Assert.Fail(error.Message)

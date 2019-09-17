@@ -18,7 +18,7 @@ namespace SkillsFunc
 {
     public static class AddEvaluationFunction
     {
-        [FunctionName("AddEvaluationFunction")]
+        [FunctionName(nameof(AddEvaluationFunction))]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -29,15 +29,22 @@ namespace SkillsFunc
                 .AddEnvironmentVariables()
                 .Build();
             var connectionString = config["SkillsStorageConnectionString"];
+            DatedUserEvaluationDto evaluationAddedEvent = null;
 
-            string requestBody = new StreamReader(req.Body).ReadToEnd();
-            var evaluationAddedEvent = JsonConvert.DeserializeObject<DatedUserEvaluationDto>(requestBody);
+            try
+            {
+                string requestBody = new StreamReader(req.Body).ReadToEnd();
+                evaluationAddedEvent = JsonConvert.DeserializeObject<DatedUserEvaluationDto>(requestBody);
 
-            await AddEvaluationAddedEventAsync(connectionString, evaluationAddedEvent);
-
-            return evaluationAddedEvent != null
-                ? (ActionResult)new OkObjectResult($"Hello, {evaluationAddedEvent}, {connectionString}")
-                : new BadRequestObjectResult($"Issue with the input {evaluationAddedEvent}");
+                await AddEvaluationAddedEventAsync(connectionString, evaluationAddedEvent);
+                return new OkObjectResult($"{evaluationAddedEvent} added!");
+            }
+            catch (System.Exception ex)
+            {
+                var message = $"Issue with the input {evaluationAddedEvent}";
+                log.LogError(ex, message);
+                return new BadRequestObjectResult(message);
+            }
         }
     }
 }

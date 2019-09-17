@@ -16,7 +16,7 @@ type TestEventRepo () =
             eventType = "EvaluationAdded"
         }
 
-        let connectionString = ""
+        let connectionString = "UseDevelopmentStorage=true"
         let result = saveEvent connectionString eventToStore |> Async.RunSynchronously
         match result with
         | Error error   -> Assert.Fail(error.Message)
