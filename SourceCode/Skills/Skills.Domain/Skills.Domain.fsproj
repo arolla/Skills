@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Types\Result.fs" />
     <Compile Include="Types\Level.fs" />
     <Compile Include="Types\Skill.fs" />
     <Compile Include="Types\EvaluationDate.fs" />

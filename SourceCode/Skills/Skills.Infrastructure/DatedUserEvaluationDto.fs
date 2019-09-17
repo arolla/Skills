@@ -4,6 +4,7 @@ open System
 open Skills.Infrastructure.Dto
 open Skills.Domain.Types
 open Skills.Domain
+open Skills.Domain.Result
 
 type DatedUserEvaluationDto = {
     date: DateTime
@@ -14,19 +15,13 @@ type DatedUserEvaluationDto = {
 module DatedUserEvaluationDto =
 
     let toDomainEvent userEvaluation =
-        let user = UserDto.toDomain userEvaluation.user
-        let evaluation = EvaluationDto.toDomain userEvaluation.evaluation
-    
-        match user with
-        | Error err -> failwith err 
-        | Ok user ->
-        match evaluation with
-        | Error err -> failwith err 
-        | Ok evaluation ->
-        let userSkill:UserEvaluation = {
-            user = user
-            evaluation = evaluation
+
+        let result = result{
+            let! user = UserDto.toDomain userEvaluation.user
+            let! evaluation = EvaluationDto.toDomain userEvaluation.evaluation
+            return EvaluationAdded.create { user = user; evaluation = evaluation } userEvaluation.date
         }
 
-        EvaluationAdded.create userSkill userEvaluation.date
-    
+         match result with 
+         | Error err -> failwith err
+         | Ok evaluationAdded -> evaluationAdded

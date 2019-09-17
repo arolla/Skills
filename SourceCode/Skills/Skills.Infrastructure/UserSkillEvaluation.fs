@@ -5,6 +5,7 @@ open Skills.Domain.UserSkillEvaluation
 open Newtonsoft.Json
 open Skills.Domain
 open Skills.Infrastructure.Dto
+open Skills.Domain.Result
 
 module UserSkillEvaluation =
 
@@ -28,30 +29,26 @@ module UserSkillEvaluation =
         }
 
     let convertDtoSkills (userSkills: UserSkillsDto) : Result<UserEvaluations, string list> =
-            
-        let userResult = UserDto.toDomain userSkills.user
-        let evaluations = 
-            userSkills.evaluations 
-            |> Array.map EvaluationDto.toDomain
-            |> Array.fold (fun acc res ->
-                match acc, res with
-                | Ok evals, Ok(eval)        -> Ok (eval :: evals)
-                | Ok _, Error(error)        -> Error([error])
-                | Error errors, Ok _        -> Error errors
-                | Error errors, Error error -> Error(error::errors)
-            ) (Ok([]))
+        
+        result{
+            let! user = UserDto.toDomain userSkills.user |> Result.mapError (fun error -> [error])
+            let! evaluations = 
+                userSkills.evaluations 
+                |> Array.map EvaluationDto.toDomain
+                |> Array.fold (fun acc res ->
+                    match acc, res with
+                    | Ok evals, Ok(eval)        -> Ok (eval :: evals)
+                    | Ok _, Error(error)        -> Error([error])
+                    | Error errors, Ok _        -> Error errors
+                    | Error errors, Error error -> Error(error::errors)
+                ) (Ok([]))
 
-        match userResult with
-        | Error error -> Error [error]
-        | Ok user ->
-        match evaluations with
-        | Error error -> Error error
-        | Ok evaluations ->
             let userSkills : UserEvaluations = {
                 user = user
                 evaluations = evaluations
             }
-            userSkills |> Ok
+            return userSkills
+        }
 
 
     let serializeSkills usersSkills =
@@ -59,27 +56,29 @@ module UserSkillEvaluation =
 
     let deserializeUserSkills jsonContent =
         JsonConvert.DeserializeObject<UserSkillsDto>(jsonContent)
-
     
     let addEvaluation readUserSkills saveUserSkills (event : EvaluationAddedDto) =
-        let toAsyncEvaluationError message =
-            async { return message |> exn |> SaveException |> Error }
+
+        let toAddEvaluationError = exn >> SaveException >> Error
+        let toAsyncAddEvaluationError err =
+            async {return toAddEvaluationError err}
 
         let userSkill = JsonConvert.DeserializeObject<UserSkillDto> event.data
-        let evaluationResult = 
-            Evaluation.create 
-                userSkill.evaluation.skill 
-                userSkill.evaluation.level
-                userSkill.evaluation.date
-        match evaluationResult with
-        | Error message -> toAsyncEvaluationError message
-        | Ok evaluation ->
-        let userResult = User.create userSkill.user.name
-        match userResult with
-        | Error message -> toAsyncEvaluationError message
-        | Ok user ->
-        UserSkillEvaluation.addEvaluation
-            readUserSkills
-            saveUserSkills
-            user
-            evaluation
+
+        let results = result {
+            let! evaluation = 
+                Evaluation.create 
+                    userSkill.evaluation.skill 
+                    userSkill.evaluation.level
+                    userSkill.evaluation.date
+            let! user = User.create userSkill.user.name
+            return evaluation, user
+        }
+        match results with
+        | Error err -> toAsyncAddEvaluationError err
+        | Ok (evaluation, user) ->
+            addEvaluation
+                readUserSkills
+                saveUserSkills
+                user
+                evaluation

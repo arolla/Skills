@@ -1,8 +1,11 @@
 ﻿namespace Skills.Domain
 
 open Types
+open Skills.Domain.Result
      
 module User =
     let create name =
-        UserName.create name
-        |> Result.map (fun userName -> {name = userName})
+        result {
+            let! userName = UserName.create name
+            return {name = userName}
+        }
