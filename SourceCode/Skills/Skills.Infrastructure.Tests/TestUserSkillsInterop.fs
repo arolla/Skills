@@ -3,9 +3,10 @@
 open Skills.Infrastructure.Dto
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure.UserSkillsInterop
+open System
 
 module Tests =
-    let connectionString = ""
+    let connectionString = "UseDevelopmentStorage=true"
 
     [<TestClass>]
     type TestUserSkillsInterop () =
@@ -47,3 +48,19 @@ module Tests =
                 let! result = ReadUserSkillsAsync connectionString user |> Async.AwaitTask
                 Assert.AreEqual(null, result)
              } |> Async.RunSynchronously
+
+
+        [<TestMethod>]
+        [<ExpectedException(typeof<ArgumentException>)>]
+        member this.``Given an empty connection string When I call ReadUserSkillsAsync with this argument Then I get an exception``() =
+            let connectionString = ""
+            let _ = ReadUserSkillsAsync connectionString Unchecked.defaultof<_>
+            Assert.Fail("Should have throw an exception")
+
+
+        [<TestMethod>]
+        [<ExpectedException(typeof<ArgumentNullException>)>]
+        member this.``Given a null userDto When I call ReadUserSkillsAsync with this argument Then I get an exception``() =
+            let connectionString = "myValidConnectionString"
+            let _ = ReadUserSkillsAsync connectionString Unchecked.defaultof<_>
+            Assert.Fail("Should have throw an exception")
