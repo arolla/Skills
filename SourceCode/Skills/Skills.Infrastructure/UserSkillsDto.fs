@@ -20,13 +20,7 @@ module UserSkillsDto =
             let! evaluations = 
                 dto.evaluations
                 |> Array.map EvaluationDto.toDomain
-                |> Array.fold (fun acc res ->
-                    match acc, res with
-                    | Ok evals, Ok(eval)        -> Ok (eval :: evals)
-                    | Ok _, Error(error)        -> Error([error])
-                    | Error errors, Ok _        -> Error errors
-                    | Error errors, Error error -> Error(error::errors)
-                ) (Ok([]))
+                |> Result.arrayOfResultToResultList
 
             return toDomain user evaluations
         }
