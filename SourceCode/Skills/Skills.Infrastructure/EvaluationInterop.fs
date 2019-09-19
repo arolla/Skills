@@ -5,11 +5,13 @@ open UserSkillsRepo
 open EventStore
 open EventRepo
 open EventSender
+open Microsoft.Extensions.Logging
 
 module EvaluationInterop =
 
-    let AddEvaluationAsync connectionString event =
+    let AddEvaluationAsync connectionString (logger:ILogger) event =
         if System.String.IsNullOrWhiteSpace(connectionString) then invalidArg "connectionString" "Must not be null, empty or whitespace"
+        if isNull(box logger) then nullArg "logger"
         if isNull(box event) then nullArg "event"
         if System.String.IsNullOrWhiteSpace(event.data) then invalidArg "event.data" "Must not be null, empty or whitespace"
         if System.String.IsNullOrWhiteSpace(event.eventType) then invalidArg "event.eventType" "Must not be null, empty or whitespace"
@@ -20,12 +22,21 @@ module EvaluationInterop =
 
         async{
             match! addEvaluation readSkills saveSkills event with
-            | Ok _      -> ()
+            | Ok _      -> 
+                let message = sprintf "Event processed successfully !%A%A" System.Environment.NewLine event
+                logger.LogInformation(message)
             | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.EvaluationAlreadyExists evaluation) -> 
-                sprintf "This evaluation already exists: %A" evaluation |> exn |> raise
-            | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.SaveException exn) -> raise exn
+                let message = sprintf "This evaluation already exists: %A" evaluation
+                logger.LogError(message)
+            | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.SaveException exn) -> 
+                let message = sprintf "Issue on event %A%A%A" event System.Environment.NewLine exn
+                logger.LogError(message)
             | Error (Skills.Domain.UserSkillEvaluation.AddEvaluationError.ReadUserSkillsErrors errors) -> 
-                errors |> String.concat ", " |> exn |> raise
+                let message = sprintf "Issue on event %A%A%A" event System.Environment.NewLine
+                let sep = sprintf "%A" System.Environment.NewLine 
+                let message = errors |> String.concat sep |> message
+                logger.LogError(message)
+
         }
         |> Async.StartImmediateAsTask :> System.Threading.Tasks.Task
 

@@ -30,8 +30,7 @@ namespace SkillsFunc
             try
             {
                 evaluationAddedEvent = JsonConvert.DeserializeObject<EvaluationAddedDto>(myQueueItem);
-                await AddEvaluationAsync(connectionString, evaluationAddedEvent);
-                log.LogInformation($"C# Queue trigger function user skill saved: {evaluationAddedEvent.data} ");
+                await AddEvaluationAsync(connectionString, log, evaluationAddedEvent);
             }
             catch (System.Exception ex)
             {

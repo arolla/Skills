@@ -4,6 +4,7 @@ open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Skills.Infrastructure.EvaluationInterop
 open Skills.Infrastructure
+open Microsoft.Extensions.Logging
 
 [<TestClass>]
 type TestEvaluationInterop () =
@@ -61,7 +62,7 @@ type TestEvaluationInterop () =
     [<ExpectedException(typeof<ArgumentException>)>]
     member this.``Given an empty connection string When I call AddEvaluationAsync with this argument Then I get an exception``() =
         let connectionString = ""
-        let _ = AddEvaluationAsync connectionString Unchecked.defaultof<_>
+        let _ = AddEvaluationAsync connectionString Unchecked.defaultof<_> Unchecked.defaultof<_>
         Assert.Fail("Should have throw an exception")
 
 
@@ -69,7 +70,15 @@ type TestEvaluationInterop () =
     [<ExpectedException(typeof<ArgumentException>)>]
     member this.``Given a null connection string When I call AddEvaluationAsync with this argument Then I get an exception``() =
         let connectionString = Unchecked.defaultof<_>
-        let _ = AddEvaluationAsync connectionString Unchecked.defaultof<_>
+        let _ = AddEvaluationAsync connectionString Unchecked.defaultof<_> Unchecked.defaultof<_>
+        Assert.Fail("Should have throw an exception")
+
+
+    [<TestMethod>]
+    [<ExpectedException(typeof<ArgumentNullException>)>]
+    member this.``Given a null logger When I call AddEvaluationAsync with this argument Then I get an exception``() =
+        let connectionString = "myValidConnectionString"
+        let _ = AddEvaluationAsync connectionString Unchecked.defaultof<_> Unchecked.defaultof<_>
         Assert.Fail("Should have throw an exception")
 
 
@@ -77,7 +86,14 @@ type TestEvaluationInterop () =
     [<ExpectedException(typeof<ArgumentNullException>)>]
     member this.``Given a null event When I call AddEvaluationAsync with this argument Then I get an exception``() =
         let connectionString = "myValidConnectionString"
-        let _ = AddEvaluationAsync connectionString Unchecked.defaultof<_>
+        let logger = 
+            { new ILogger with 
+              member this.BeginScope(_) = Unchecked.defaultof<_>
+              member this.IsEnabled(_) = false
+              member this.Log(_, _, _, _ ,_) = ()
+            }
+
+        let _ = AddEvaluationAsync connectionString logger Unchecked.defaultof<_>
         Assert.Fail("Should have throw an exception")
 
 
@@ -90,7 +106,13 @@ type TestEvaluationInterop () =
             eventType = "eventType"
             date = DateTime.Now
         }
-        let _ = AddEvaluationAsync connectionString event
+        let logger = 
+            { new ILogger with 
+              member this.BeginScope(_) = Unchecked.defaultof<_>
+              member this.IsEnabled(_) = false
+              member this.Log(_, _, _, _ ,_) = ()
+            }
+        let _ = AddEvaluationAsync connectionString logger event
         Assert.Fail("Should have throw an exception")
 
 
@@ -103,5 +125,11 @@ type TestEvaluationInterop () =
             eventType = Unchecked.defaultof<_>
             date = DateTime.Now
         }
-        let _ = AddEvaluationAsync connectionString event
+        let logger = 
+            { new ILogger with 
+              member this.BeginScope(_) = Unchecked.defaultof<_>
+              member this.IsEnabled(_) = false
+              member this.Log(_, _, _, _ ,_) = ()
+            }
+        let _ = AddEvaluationAsync connectionString logger event
         Assert.Fail("Should have throw an exception")
