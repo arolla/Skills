@@ -2,7 +2,6 @@
 
 open System
 open Skills.Domain
-open Newtonsoft.Json
 open Skills.Infrastructure.Dto
 
 type EvaluationAddedDto = {
@@ -21,11 +20,10 @@ module EventStore =
             evaluation = { skill = Skill.value skill; level = Level.value level; date = EvaluationDate.value date }
         }
 
-        let serializedUserSkill = JsonConvert.SerializeObject(userSkill)
 
         {
             date = EventDate.value domainEvent.date
-            data = serializedUserSkill
+            data = Json.serialize userSkill
             eventType = typeof<EvaluationAdded>.Name
         }
 

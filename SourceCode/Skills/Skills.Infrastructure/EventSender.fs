@@ -17,7 +17,7 @@ module EventSender =
         let queue = connectionString |> getEventQueue
         let jsonEvent = 
             evaluationAddedDto
-            |> serialize
+            |> Json.serialize
         
         let cloudQueueMessage = new CloudQueueMessage(jsonEvent)
         

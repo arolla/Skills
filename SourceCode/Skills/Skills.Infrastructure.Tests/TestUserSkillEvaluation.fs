@@ -81,42 +81,6 @@ type TestUserSkillEvaluation () =
 
         Assert.AreEqual(expectedUserSkills, convertedSkills)
 
-    [<TestMethod>]
-    member this.``Given many users skills When I would save them Then they are serialized in a json content``() =
-        let jack:UserDto = {
-            name = "Jack"
-        }
-        let tom:UserDto = {
-            name = "Tom"
-        }
-        let usersSkills:UserSkillsDto list = [
-            {
-                user = tom
-                evaluations = [|
-                    {
-                        skill = "csharp"
-                        date = DateTime(2019, 08,23)
-                        level = 3
-                    }
-                |]
-            }
-            {
-                user = jack
-                evaluations = [|
-                    {
-                        skill = "fsharp"
-                        date = DateTime(2019, 08,23)
-                        level = 3
-                    }
-                |]
-            }
-        ]
-
-        let jsonContent = serializeSkills usersSkills
-
-        let expectedJson = """[{"user":{"name":"Tom"},"evaluations":[{"skill":"csharp","date":"2019-08-23T00:00:00","level":3}]},{"user":{"name":"Jack"},"evaluations":[{"skill":"fsharp","date":"2019-08-23T00:00:00","level":3}]}]"""
-        Assert.AreEqual(expectedJson, jsonContent)
-
     
     [<TestMethod>]
        member this.``Given EvaluationAdded dto event When I add a new evaluation Then this lastest is added to the user skills``() =

@@ -2,7 +2,6 @@ namespace Skills.Infrastructure
 
 open Skills.Domain.Types
 open Skills.Domain.UserSkillEvaluation
-open Newtonsoft.Json
 open Skills.Domain
 open Skills.Infrastructure.Dto
 open Skills.Domain.Result
@@ -44,32 +43,31 @@ module UserSkillEvaluation =
             return userSkills
         }
 
-
-    let serializeSkills usersSkills =
-        JsonConvert.SerializeObject(usersSkills)
-
-    let deserializeUserSkills jsonContent =
-        JsonConvert.DeserializeObject<UserSkillsDto>(jsonContent)
     
     let addEvaluation readUserSkills saveUserSkills (event : EvaluationAddedDto) =
 
-        let toAddEvaluationError = exn >> SaveException >> Error
-        let toAsyncAddEvaluationError err =
-            async {return toAddEvaluationError err}
+        let exceptionToAddEvaluationError = SaveException >> Error
+        let stringToAddEvaluationError = exn >> exceptionToAddEvaluationError
 
-        let userSkill = JsonConvert.DeserializeObject<UserSkillDto> event.data
 
         let results = result {
+            let! userSkill = 
+                Json.deserialize<UserSkillDto> event.data 
+                |> Result.mapError exceptionToAddEvaluationError
             let! evaluation = 
                 Evaluation.create 
                     userSkill.evaluation.skill 
                     userSkill.evaluation.level
                     userSkill.evaluation.date
-            let! user = User.create userSkill.user.name
+                |> Result.mapError stringToAddEvaluationError
+            let! user = 
+                User.create userSkill.user.name
+                |> Result.mapError stringToAddEvaluationError
+
             return evaluation, user
         }
         match results with
-        | Error err -> toAsyncAddEvaluationError err
+        | Error err -> async{return err}
         | Ok (evaluation, user) ->
             addEvaluation
                 readUserSkills

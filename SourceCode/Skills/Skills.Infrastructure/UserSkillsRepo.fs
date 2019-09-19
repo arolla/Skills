@@ -30,7 +30,7 @@ module UserSkillsRepo =
         let jsonUserSkills = 
             userSkills
             |> UserSkillsDto.fromDomain
-            |> serializeSkills
+            |> Json.serialize
         let insertOperation = TableOperation.InsertOrReplace( UserSkillsEntity(userName, jsonUserSkills))
         async {
             try
@@ -48,8 +48,10 @@ module UserSkillsRepo =
             | None -> return None
             | Some(userSkill) -> 
                 let userSkill = userSkill :?> UserSkillsEntity
-                let jsonUserSkills = userSkill.userSkills
-                return (deserializeUserSkills jsonUserSkills) |> Some
+                return 
+                    match userSkill.userSkills |> Json.deserialize with
+                    | Ok userSkills -> Some userSkills
+                    | _ -> None
         }
 
 

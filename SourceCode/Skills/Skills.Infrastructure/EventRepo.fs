@@ -3,7 +3,6 @@
 open System
 open Microsoft.WindowsAzure.Storage.Table
 open Microsoft.WindowsAzure.Storage
-open Newtonsoft.Json
 
 module EventRepo =
 
@@ -15,11 +14,7 @@ module EventRepo =
         new() = EventEntity(null)
         member val Data : string = data with get, set
 
-
-    let serialize (evaluationAddedDto:EvaluationAddedDto) =
-        evaluationAddedDto |> JsonConvert.SerializeObject
     
-
     let getEventStoreTable connectionString =
         let storageAccount = CloudStorageAccount.Parse(connectionString)
         let tableClient = storageAccount.CreateCloudTableClient()
@@ -30,7 +25,7 @@ module EventRepo =
         let table = connectionString |> getEventStoreTable
         let jsonEvent = 
             evaluationAddedDto
-            |> serialize
+            |> Json.serialize
         let insertOperation = TableOperation.InsertOrReplace(new EventEntity(jsonEvent))
         async {
             try
